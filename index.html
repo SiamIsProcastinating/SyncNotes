@@ -199,7 +199,7 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
  </div>
  <div class="main">
   <div class="row glass" id="hd"><button class="ib back" id="back"></button><button class="ib" id="dwb" title="All notes"></button><span id="meta"></span><button class="ib" id="pin" title="Pin"></button><button class="ib" id="mmb" title="More"></button></div>
-  <div id="mm" class="glass"><button id="nth"></button><button id="tsb"></button><button id="fm"></button><button id="xb"></button>
+  <div id="mm" class="glass"><button id="nth"></button><button id="tsb"></button><button id="fm"></button><button id="twb"></button><button id="xb"></button>
    <div id="xm"><button data-x="txt">Download .txt</button><button data-x="md">Download .md</button><button data-x="html">Download .html</button><button data-x="copy">Copy as Markdown</button><button data-x="share">Share to another app</button></div>
    <i class="hr"></i><button id="del" class="dng"></button></div>
   <div class="card glass"><div id="ed" contenteditable="true" data-ph="Select a note or tap +"></div>
@@ -215,7 +215,7 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
  <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button><button id="ud" hidden>Use app background for this note</button>
  <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Accent colour</h3><div id="acv"><span>Live preview</span><i>Done</i></div><div id="dots" class="dots"></div><div class="row" style="gap:8px;padding-top:4px"><label class="btn" style="display:flex;align-items:center;gap:8px;flex:1">Custom <input type="color" id="acc" style="border:0;width:34px;height:26px;background:none;padding:0"></label><button id="acg" style="flex:1"></button></div></div>
  <div id="dat" class="tp tabhide" data-t="data"><h3>Device storage</h3><div style="padding:2px 12px 8px"><div id="stbar"><i></i></div><div id="stt"></div></div><button id="stp" hidden></button><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
- <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.05.1</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
+ <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.06</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
 </div></div>
 <div id="ts"></div>
 <script>
@@ -483,4 +483,20 @@ addEventListener('popstate',()=>{if(skip){skip--;return}if(pushed>0){pushed--;cl
 const mo=new MutationObserver(q);['#app','#dw','#mm','#bot','#sh'].forEach(i=>mo.observe($(i),{attributes:true,attributeFilter:['class','hidden']}));
 addEventListener('resize',q);
 if(history.state&&history.state.sn){skip++;history.go(-history.state.sn)}})();
+
+// ===== typewriter mode: the line you are writing stays in the middle =====
+(()=>{const ed=$('#ed'),on=()=>S.tw!==false,
+pad=()=>{ed.style.paddingBottom=on()?Math.round(ed.clientHeight*.55)+'px':''},
+mid=sm=>{if(!on()||document.activeElement!==ed)return;const g=getSelection();if(!g.rangeCount)return;const r=g.getRangeAt(0).cloneRange();r.collapse(true);let b=r.getClientRects()[0];
+ if(!b||!b.height){let n=r.startContainer;n=n.nodeType==1?n:n.parentElement;if(!n||n==ed)return;b=n.getBoundingClientRect()}
+ const er=ed.getBoundingClientRect(),d=b.top+b.height/2-(er.top+er.height*.4);if(Math.abs(d)>4)ed.scrollBy({top:d,behavior:sm?'smooth':'auto'})},
+go=sm=>requestAnimationFrame(()=>mid(sm));
+$('#twb').innerHTML='<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M9 7l-5 5 5 5M15 7l5 5-5 5" transform="rotate(90 12 12)"/></svg><span>Keep writing centered</span><u></u>';
+const st=()=>$('#twb').classList.toggle('on',on());st();
+$('#mmb').addEventListener('click',st);
+$('#twb').onclick=()=>{S.tw=!on();sv('sn_s',S);st();pad();toast(on()?'Your writing stays in the middle':'Typewriter mode off');if(on())go(true)};
+new ResizeObserver(pad).observe(ed);pad();
+ed.addEventListener('input',()=>go(false));
+ed.addEventListener('keyup',e=>{if(/^(Enter|Arrow|Page)/.test(e.key))go(true)});
+if(window.visualViewport)visualViewport.addEventListener('resize',()=>go(false))})();
 })();</script></body></html>
