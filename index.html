@@ -215,7 +215,7 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
  <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button><button id="ud" hidden>Use app background for this note</button>
  <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Accent colour</h3><div id="acv"><span>Live preview</span><i>Done</i></div><div id="dots" class="dots"></div><div class="row" style="gap:8px;padding-top:4px"><label class="btn" style="display:flex;align-items:center;gap:8px;flex:1">Custom <input type="color" id="acc" style="border:0;width:34px;height:26px;background:none;padding:0"></label><button id="acg" style="flex:1"></button></div></div>
  <div id="dat" class="tp tabhide" data-t="data"><h3>Device storage</h3><div style="padding:2px 12px 8px"><div id="stbar"><i></i></div><div id="stt"></div></div><button id="stp" hidden></button><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
- <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.05</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
+ <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.05.1</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
 </div></div>
 <div id="ts"></div>
 <script>
@@ -472,4 +472,15 @@ async function stor(){const e=NS&&NS.estimate?await NS.estimate():{},pr=NS&&NS.p
 $('#stp').onclick=async()=>{let g=false;try{g=await NS.persist()}catch(e){}toast(g?'Storage is now protected':'Not granted. Installing the app to your home screen usually helps');stor()};
 $('#tabs').addEventListener('click',e=>{if(e.target.dataset.t=='data')stor()});
 bgs.filter(b=>!b.th&&b.img).forEach(b=>{const im=new Image();im.onload=()=>{b.th=thumb(im);sv('sn_b',bgs);apply()};im.src=b.img})})();
+
+// ===== phone back gesture: close layers one by one before leaving the app =====
+(()=>{let pushed=0,skip=0,qd=0;
+const layers=()=>{const a=[];if(innerWidth<820&&$('#app').classList.contains('open'))a.push('note');if($('#bot').classList.contains('open'))a.push('tags');if($('#mm').classList.contains('show'))a.push('menu');if($('#dw').classList.contains('on'))a.push('drawer');if(!$('#sh').hidden)a.push('sheet');return a};
+const closeTop=()=>{const t=layers().pop();if(t=='sheet'){$('#sh').hidden=true;apply()}else if(t=='drawer')$('#dw').classList.remove('on');else if(t=='menu'){$('#mm').classList.remove('show');$('#xm').classList.remove('open');$('#xb').classList.remove('open')}else if(t=='tags')$('#bot').classList.remove('open');else if(t=='note')closeNote()};
+const sync=()=>{qd=0;const w=layers().length;if(w>pushed){while(pushed<w)history.pushState({sn:++pushed},'')}else if(w<pushed){const d=pushed-w;pushed=w;skip++;history.go(-d)}};
+const q=()=>{if(!qd){qd=1;queueMicrotask(sync)}};
+addEventListener('popstate',()=>{if(skip){skip--;return}if(pushed>0){pushed--;closeTop();setTimeout(sync,260)}});
+const mo=new MutationObserver(q);['#app','#dw','#mm','#bot','#sh'].forEach(i=>mo.observe($(i),{attributes:true,attributeFilter:['class','hidden']}));
+addEventListener('resize',q);
+if(history.state&&history.state.sn){skip++;history.go(-history.state.sn)}})();
 })();</script></body></html>
