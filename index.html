@@ -4,10 +4,10 @@
 <title>Notes</title>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#15161a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Notes"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <style>
-:root{--fg:#1c1c1e;--mut:#6b6b70;--card:rgba(255,255,255,.62);--ln:rgba(0,0,0,.1);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--fg:#1c1c1e;--mut:#6b6b70;--card:rgba(255,255,255,.62);--ln:rgba(0,0,0,.1);box-sizing:border-box}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--fg:#f5f5f7;--mut:#c4c4ca;--card:rgba(20,20,26,.55);--ln:rgba(255,255,255,.14)}}
 :root[data-theme="dark"]{--fg:#f5f5f7;--mut:#c4c4ca;--card:rgba(20,20,26,.55);--ln:rgba(255,255,255,.14)}
-*{box-sizing:border-box}html,body{height:100%;margin:0}
+*{box-sizing:border-box}html,body{height:var(--vh,100%);margin:0}body{position:fixed;left:0;right:0;top:var(--vt,0px);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html.kb body{padding-bottom:0}
 body{font:16px/1.5 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:var(--fg);overflow:hidden;background:transparent}
 #bg{position:fixed;inset:-24px;z-index:-2;background:#f6f6f3;overflow:hidden}#dim{position:fixed;inset:0;z-index:-1}
 .app{height:100%;display:flex}.side,.main{display:flex;flex-direction:column;min-width:0;height:100%;padding:10px;gap:8px}
@@ -62,13 +62,37 @@ mark{background:rgba(255,214,10,.55);color:inherit;border-radius:3px}
 #ed [data-day]::after{top:calc(.55em + 40px)}
 #ed li[data-dl]{border-top:1px solid var(--ln);margin-top:.8em;padding-top:.5em}#ed li[data-dl]::after{top:calc(1.05em + 1px)}
 @media(max-width:600px){.ts #ed [data-day]::before{margin-right:-46px}}
+
+:root{--ac:#7c6cf0;--ac2:#e46fb0;--sh:0 10px 30px rgba(0,0,0,.13);--sp:cubic-bezier(.2,.9,.25,1.1)}
+.glass{border-radius:22px;box-shadow:var(--sh);transition:box-shadow .25s}.glass:focus-within{box-shadow:var(--sh),0 0 0 2px var(--ac)}
+.ib{transition:background .18s,transform .15s var(--sp)}.ib:active{transform:scale(.86)}
+.plus{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;box-shadow:0 6px 16px color-mix(in srgb,var(--ac) 45%,transparent);transition:transform .3s var(--sp)}.plus:hover{transform:rotate(90deg) scale(1.08)}
+#pal{position:relative}#sd{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;opacity:0}#sd.ok{opacity:1;background:#34c759}#sd.bz{opacity:1;background:#ffcc00;animation:pulse 1s infinite}#sd.er{opacity:1;background:#ff453a}
+.it{position:relative;transition:background .18s,transform .2s var(--sp)}.it:hover{transform:translateX(3px)}.it.on::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:3px;background:linear-gradient(var(--ac),var(--ac2))}
+#list.go .it{animation:rise .5s var(--sp) both;animation-delay:calc(var(--i,0)*40ms)}
+#tb .ib{border-radius:10px}#wc{margin-left:auto;align-self:center;padding:0 10px;font-size:12px;color:var(--mut);white-space:nowrap}
+.mh{padding:2px 4px 10px}.mh b{font-size:21px}
+.tabs{display:flex;gap:4px;padding:4px;border-radius:16px;background:var(--ln);margin-bottom:8px}.tabs.one{display:none}
+.tabs button{flex:1;text-align:center;font-weight:600;font-size:14px;transition:background .2s,color .2s}.tabs button.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}
+.tp{animation:fade .28s}.tabhide{display:none!important}
+.dots{display:flex;gap:12px;padding:6px 4px}.dots i{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .2s var(--sp)}.dots i:hover{transform:scale(1.15)}.dots i.on{border-color:var(--fg);box-shadow:0 0 0 3px var(--card)}
+#trl button{display:flex;justify-content:space-between;gap:10px;width:100%}#trl span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#cl{margin-top:12px;text-align:center;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2))}
+.sheet{min-height:62%;border-radius:28px 28px 0 0}
+@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.98)}}@keyframes slideIn{from{opacity:0;transform:translateX(38px)}}@keyframes fade{from{opacity:0}}
+@keyframes sheetUp{from{opacity:0;transform:translateY(46px)}}@keyframes pop{from{opacity:0;transform:scale(.94) translateY(8px)}}@keyframes pulse{50%{opacity:.35}}
+.open .main{animation:slideIn .38s var(--sp)}.pop:not([hidden]){animation:pop .18s var(--sp)}
+#sh:not([hidden]){animation:fade .2s}#sh:not([hidden]) .sheet{animation:sheetUp .38s var(--sp)}
+#ts{transform:translate(-50%,12px) scale(.95);transition:.3s var(--sp)}#ts.on{transform:translate(-50%,0) scale(1)}
+@media(min-width:820px){.open .main{animation:none}#sh{align-items:center}.sheet{min-height:0;border-radius:28px;width:min(600px,92vw)}#sh:not([hidden]) .sheet{animation-name:pop}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head>
 <body>
 <div id="bg"><div id="bgb"></div><img id="bgi" alt="" style="display:none"></div><div id="dim"></div>
 <div class="app" id="app">
  <div class="side">
   <div class="row"><div class="glass row" style="flex:1"><input type="search" id="q" placeholder="Search: cat -dog tag:work"></div>
-   <button class="ib glass" id="pal" title="Look and data">🎨</button><button class="ib plus" id="new" title="New note">+</button></div>
+   <button class="ib glass" id="pal" title="Menu (Ctrl+,)">☰<i id="sd"></i></button><button class="ib plus" id="new" title="New note">+</button></div>
   <div class="glass" id="list"></div>
  </div>
  <div class="main">
@@ -78,18 +102,18 @@ mark{background:rgba(255,214,10,.55);color:inherit;border-radius:3px}
    <button data-x="txt">Download .txt</button><button data-x="md">Download .md</button><button data-x="html">Download .html</button><button data-x="copy">Copy as Markdown</button><button data-x="share">Share to another app</button></div>
   <div class="row glass" id="tg"><input id="tgi" placeholder="+ tag (press Enter)"></div>
   <div class="card glass"><div id="ed" contenteditable="true" data-ph="Select a note or tap +"></div>
-   <div id="tb"><button class="ib" data-c="bold"><b>B</b></button><button class="ib" data-c="italic"><i>I</i></button><button class="ib" data-c="underline"><u>U</u></button><button class="ib" data-c="strikeThrough"><s>S</s></button><button class="ib" data-c="h2">H</button><button class="ib" data-c="insertUnorderedList">•</button><button class="ib" data-c="insertOrderedList">1.</button><button class="ib" data-c="blockquote">❝</button><button class="ib" data-c="removeFormat">Tx</button></div></div>
+   <div id="tb"><button class="ib" data-c="bold"><b>B</b></button><button class="ib" data-c="italic"><i>I</i></button><button class="ib" data-c="underline"><u>U</u></button><button class="ib" data-c="strikeThrough"><s>S</s></button><button class="ib" data-c="h2">H</button><button class="ib" data-c="insertUnorderedList">•</button><button class="ib" data-c="insertOrderedList">1.</button><button class="ib" data-c="blockquote">❝</button><button class="ib" data-c="removeFormat">Tx</button><span id="wc"></span></div></div>
  </div>
 </div>
-<div id="sh" hidden><div class="sheet">
- <h3 id="sht">App background</h3><div id="sw"></div>
+<div id="sh" hidden><div class="sheet"><div class="mh"><b>Menu</b></div><div class="tabs" id="tabs"><button data-t="look" class="on">Look</button><button data-t="data">Sync &amp; data</button><button data-t="about">About</button></div>
+ <div class="tp" data-t="look"><h3 id="sht">App background</h3><div id="sw"></div>
  <label>Dim <input type="range" id="dm" min="0" max="80"></label>
  <label>Blur <input type="range" id="bl" min="0" max="14"></label>
  <label>Text size <input type="range" id="fz" min="14" max="26"></label>
  <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button><button id="ud" hidden>Use app background for this note</button>
- <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label>
- <div id="dat"><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
- <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label></div><button id="cl">Done</button>
+ <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>App accent colour</h3><div id="dots" class="dots"></div></div>
+ <div id="dat" class="tp tabhide" data-t="data"><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
+ <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.02</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
 </div></div>
 <div id="ts"></div>
 <script>
@@ -168,7 +192,7 @@ function merge(a){const m={};a.forEach(r=>m[r.id]=r);let ch=0,need=0;
  notes.forEach(n=>{const r=m[n.id];if(!r||n.t>r.t)need=1});
  if(ch){sv('sn_n',notes);const n=get();if(n&&n.del)closeNote();else if(n&&document.activeElement!=$('#ed'))$('#ed').innerHTML=clean(n.html);render()}return need}
 const GH='https://api.github.com';let gid=localStorage.getItem('sn_gid')||'',busy=0;
-const tk=()=>localStorage.getItem('sn_tk')||'',setSync=m=>{$('#sst').textContent=m};
+const tk=()=>localStorage.getItem('sn_tk')||'',setSync=m=>{$('#sst').textContent=m;const d=$('#sd');if(d)d.className=/^Synced/.test(m)?'ok':/^Syncing/.test(m)?'bz':/off/i.test(m)?'':'er'};
 async function gh(p,o){const r=await fetch(GH+p,Object.assign({headers:{Authorization:'Bearer '+tk(),Accept:'application/vnd.github+json'}},o));if(!r.ok)throw r.status;return r.json()}
 function push(){clearTimeout(pt);pt=setTimeout(sync,1500)}
 async function sync(){if(!tk()||busy)return;busy=1;setSync('Syncing…');try{
@@ -237,4 +261,17 @@ $('#rs').onchangeOld=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=
  sv('sn_n',notes);render();push();toast('Restored')}catch(x){toast('Not a valid backup')}});e.target.value=''};
 document.addEventListener('keydown',e=>{if(e.key=='Escape'){if(!$('#sh').hidden){$('#sh').hidden=true;apply()}else if(cur)closeNote()}});document.execCommand('defaultParagraphSeparator',false,'div');$('#ed').contentEditable=false;apply();render();initSync();
 if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+(()=>{const tabs=$('#tabs'),show=t=>{tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));document.querySelectorAll('.tp').forEach(x=>x.classList.toggle('tabhide',x.dataset.t!=t));if(t=='data')trash()};
+tabs.onclick=e=>{const t=e.target.dataset.t;if(t)show(t)};
+$('#pal').addEventListener('click',()=>{tabs.classList.remove('one');show('look')});$('#nth').addEventListener('click',()=>{tabs.classList.add('one');show('look')});
+const AC=[['#7c6cf0','#e46fb0'],['#0a84ff','#5ac8fa'],['#30b27a','#a3e635'],['#ff7a45','#ffc107'],['#e5484d','#ff8fab']],R=document.documentElement.style,
+setAc=i=>{const a=AC[i]||AC[0];R.setProperty('--ac',a[0]);R.setProperty('--ac2',a[1]);document.querySelectorAll('#dots i').forEach((d,j)=>d.classList.toggle('on',j==i))};
+$('#dots').innerHTML=AC.map((a,i)=>'<i data-i="'+i+'" style="background:linear-gradient(135deg,'+a[0]+','+a[1]+')"></i>').join('');
+$('#dots').onclick=e=>{const i=e.target.dataset.i;if(i==null)return;S.ac=+i;sv('sn_s',S);setAc(+i)};setAc(S.ac||0);
+window.trash=()=>{const d=notes.filter(n=>n.del&&txt(n.html).trim()).sort((a,b)=>b.t-a.t);$('#trl').innerHTML=d.length?d.map(n=>'<button data-r="'+n.id+'"><span>'+esc(txt(n.html).trim().split('\n')[0].slice(0,40))+'</span><u style="text-decoration:none;color:var(--ac)">Restore</u></button>').join(''):'<div class="em">Nothing deleted recently.</div>'};
+$('#trl').onclick=e=>{const b=e.target.closest('button'),n=b&&notes.find(x=>x.id==b.dataset.r);if(!n)return;n.del=0;n.t=Date.now();sv('sn_n',notes);render();push();trash();toast('Note restored')};
+const wc=()=>{const t=$('#ed').textContent.trim();$('#wc').textContent=t?t.split(/\s+/).length+' words':''};new MutationObserver(wc).observe($('#ed'),{childList:true,subtree:true,characterData:true});
+addEventListener('keydown',e=>{if(!(e.ctrlKey||e.metaKey||e.altKey))return;const k=e.key.toLowerCase();if((e.ctrlKey||e.metaKey)&&k=='k'){e.preventDefault();if(cur)closeNote();$('#q').focus()}else if((e.ctrlKey||e.metaKey)&&k==','){e.preventDefault();$('#pal').click()}else if(e.altKey&&k=='n'){e.preventDefault();newNote()}});
+const L=$('#list');L.classList.add('go');[...L.children].forEach((e,i)=>e.style.setProperty('--i',Math.min(i,14)));setTimeout(()=>L.classList.remove('go'),1200)})();
+(()=>{const v=window.visualViewport;if(!v)return;let was=0;const r=document.documentElement,f=()=>{r.style.setProperty('--vh',v.height+'px');r.style.setProperty('--vt',v.offsetTop+'px');const k=innerHeight-v.height>120;r.classList.toggle('kb',k);if(k&&!was)setTimeout(()=>{const n=getSelection().anchorNode;n&&n.parentElement&&n.parentElement.scrollIntoView({block:'nearest'})},60);was=k};v.addEventListener('resize',f);v.addEventListener('scroll',f);addEventListener('orientationchange',()=>setTimeout(f,300));f()})();
 </script></body></html>
