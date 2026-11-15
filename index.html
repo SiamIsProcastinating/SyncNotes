@@ -86,6 +86,20 @@ mark{background:rgba(255,214,10,.55);color:inherit;border-radius:3px}
 #ts{transform:translate(-50%,12px) scale(.95);transition:.3s var(--sp)}#ts.on{transform:translate(-50%,0) scale(1)}
 @media(min-width:820px){.open .main{animation:none}#sh{align-items:center}.sheet{min-height:0;border-radius:28px;width:min(600px,92vw)}#sh:not([hidden]) .sheet{animation-name:pop}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+#ed{caret-color:var(--ac)}::selection{background:color-mix(in srgb,var(--ac) 35%,transparent)}
+#ed>div:first-child:not([data-ck]),#ed>p:first-child{font-size:1.45em;font-weight:700;line-height:1.35;letter-spacing:-.01em}
+#ed [data-ck]{opacity:.5;text-decoration:line-through}
+.main>.row:first-child{padding:6px 8px;gap:2px}.main>.row:first-child .ib{color:var(--mut)}.main>.row:first-child .ib:hover,.main>.row:first-child #pin{color:var(--fg)}
+.ib svg{display:block;margin:auto;pointer-events:none}
+#meta{flex:1;min-width:0;text-align:center;font-size:12.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tb{margin:4px 8px 8px;padding:4px;gap:2px;border:1px solid var(--ln);border-radius:18px;background:color-mix(in srgb,var(--card) 70%,transparent)}
+#tb .ib{min-width:38px;height:38px;border-radius:12px;color:var(--mut)}#tb .ib.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}
+#tb .sp{width:1px;background:var(--ln);margin:6px 3px;flex:none}
+.focus .side,.focus #tg{display:none}.focus .main>.row:first-child{opacity:.3;transition:opacity .3s}.focus .main>.row:first-child:hover,.focus .main>.row:first-child:focus-within{opacity:1}
+.dots{flex-wrap:wrap}
+#acv{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;color:#fff;font-weight:600;margin:4px 0 10px;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 8px 22px color-mix(in srgb,var(--ac) 40%,transparent);transition:box-shadow .3s}
+#acv span{flex:1}#acv i{font-style:normal;background:rgba(255,255,255,.25);padding:4px 14px;border-radius:99px;font-size:13px}
+@media(max-width:480px){#meta{display:none}.main>.row:first-child #back{margin-right:auto}}
 </style></head>
 <body>
 <div id="bg"><div id="bgb"></div><img id="bgi" alt="" style="display:none"></div><div id="dim"></div>
@@ -96,8 +110,8 @@ mark{background:rgba(255,214,10,.55);color:inherit;border-radius:3px}
   <div class="glass" id="list"></div>
  </div>
  <div class="main">
-  <div class="row glass" style="padding:4px 6px"><button class="ib back" id="back">‹</button><span style="flex:1"></span>
-   <button class="ib" id="nth" title="Background for this note" style="font-size:15px">🖼 Theme</button><button class="ib" id="tsb" title="Show or hide time stamps">🕒</button><button class="ib" id="pin" title="Pin">☆</button><button class="ib" id="xb" title="Export">⤓</button><button class="ib" id="del" title="Delete">🗑</button></div>
+  <div class="row glass" style="padding:4px 6px"><button class="ib back" id="back">‹</button><span id="meta"></span>
+   <button class="ib" id="nth" title="Background for this note" style="font-size:15px">🖼 Theme</button><button class="ib" id="fm" title="Focus mode"></button><button class="ib" id="tsb" title="Show or hide time stamps">🕒</button><button class="ib" id="pin" title="Pin">☆</button><button class="ib" id="xb" title="Export">⤓</button><button class="ib" id="del" title="Delete">🗑</button></div>
   <div class="pop glass" id="xm" hidden>
    <button data-x="txt">Download .txt</button><button data-x="md">Download .md</button><button data-x="html">Download .html</button><button data-x="copy">Copy as Markdown</button><button data-x="share">Share to another app</button></div>
   <div class="row glass" id="tg"><input id="tgi" placeholder="+ tag (press Enter)"></div>
@@ -111,7 +125,7 @@ mark{background:rgba(255,214,10,.55);color:inherit;border-radius:3px}
  <label>Blur <input type="range" id="bl" min="0" max="14"></label>
  <label>Text size <input type="range" id="fz" min="14" max="26"></label>
  <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button><button id="ud" hidden>Use app background for this note</button>
- <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>App accent colour</h3><div id="dots" class="dots"></div></div>
+ <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Accent colour</h3><div id="acv"><span>Live preview</span><i>Done</i></div><div id="dots" class="dots"></div><div class="row" style="gap:8px;padding-top:4px"><label class="btn" style="display:flex;align-items:center;gap:8px;flex:1">Custom <input type="color" id="acc" style="border:0;width:34px;height:26px;background:none;padding:0"></label><button id="acg" style="flex:1"></button></div></div>
  <div id="dat" class="tp tabhide" data-t="data"><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
  <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.02</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
 </div></div>
@@ -264,14 +278,30 @@ if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.se
 (()=>{const tabs=$('#tabs'),show=t=>{tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));document.querySelectorAll('.tp').forEach(x=>x.classList.toggle('tabhide',x.dataset.t!=t));if(t=='data')trash()};
 tabs.onclick=e=>{const t=e.target.dataset.t;if(t)show(t)};
 $('#pal').addEventListener('click',()=>{tabs.classList.remove('one');show('look')});$('#nth').addEventListener('click',()=>{tabs.classList.add('one');show('look')});
-const AC=[['#7c6cf0','#e46fb0'],['#0a84ff','#5ac8fa'],['#30b27a','#a3e635'],['#ff7a45','#ffc107'],['#e5484d','#ff8fab']],R=document.documentElement.style,
-setAc=i=>{const a=AC[i]||AC[0];R.setProperty('--ac',a[0]);R.setProperty('--ac2',a[1]);document.querySelectorAll('#dots i').forEach((d,j)=>d.classList.toggle('on',j==i))};
-$('#dots').innerHTML=AC.map((a,i)=>'<i data-i="'+i+'" style="background:linear-gradient(135deg,'+a[0]+','+a[1]+')"></i>').join('');
-$('#dots').onclick=e=>{const i=e.target.dataset.i;if(i==null)return;S.ac=+i;sv('sn_s',S);setAc(+i)};setAc(S.ac||0);
+const PR=['#7c6cf0','#0a84ff','#30b27a','#ff7a45','#e5484d','#e46fb0','#14b8a6','#f5b301','#8b5cf6','#64748b'],R=document.documentElement.style,ok=CSS.supports('color','hsl(from red calc(h + 45) s l)'),
+two=c=>ok?'hsl(from '+c+' calc(h + 45) s l)':c,cur_ac=()=>typeof S.ac=='number'?PR[S.ac]||PR[0]:S.ac||PR[0],
+setAc=(c,w)=>{R.setProperty('--ac',c);R.setProperty('--ac2',S.acs===0?c:two(c));document.querySelectorAll('#dots i').forEach(d=>d.classList.toggle('on',d.dataset.c==c));$('#acc').value=c;$('#acg').textContent='Style: '+(S.acs===0?'Solid':'Two-tone gradient');if(w){S.ac=c;sv('sn_s',S)}};
+$('#dots').innerHTML=PR.map(c=>'<i data-c="'+c+'" style="background:'+c+';background:linear-gradient(135deg,'+c+','+two(c)+')"></i>').join('');
+$('#dots').onclick=e=>{const c=e.target.dataset.c;if(c)setAc(c,1)};$('#acc').oninput=e=>setAc(e.target.value,1);$('#acg').onclick=()=>{S.acs=S.acs===0?1:0;setAc(cur_ac(),1)};setAc(cur_ac());
 window.trash=()=>{const d=notes.filter(n=>n.del&&txt(n.html).trim()).sort((a,b)=>b.t-a.t);$('#trl').innerHTML=d.length?d.map(n=>'<button data-r="'+n.id+'"><span>'+esc(txt(n.html).trim().split('\n')[0].slice(0,40))+'</span><u style="text-decoration:none;color:var(--ac)">Restore</u></button>').join(''):'<div class="em">Nothing deleted recently.</div>'};
 $('#trl').onclick=e=>{const b=e.target.closest('button'),n=b&&notes.find(x=>x.id==b.dataset.r);if(!n)return;n.del=0;n.t=Date.now();sv('sn_n',notes);render();push();trash();toast('Note restored')};
 const wc=()=>{const t=$('#ed').textContent.trim();$('#wc').textContent=t?t.split(/\s+/).length+' words':''};new MutationObserver(wc).observe($('#ed'),{childList:true,subtree:true,characterData:true});
 addEventListener('keydown',e=>{if(!(e.ctrlKey||e.metaKey||e.altKey))return;const k=e.key.toLowerCase();if((e.ctrlKey||e.metaKey)&&k=='k'){e.preventDefault();if(cur)closeNote();$('#q').focus()}else if((e.ctrlKey||e.metaKey)&&k==','){e.preventDefault();$('#pal').click()}else if(e.altKey&&k=='n'){e.preventDefault();newNote()}});
 const L=$('#list');L.classList.add('go');[...L.children].forEach((e,i)=>e.style.setProperty('--i',Math.min(i,14)));setTimeout(()=>L.classList.remove('go'),1200)})();
 (()=>{const v=window.visualViewport;if(!v)return;let was=0;const r=document.documentElement,f=()=>{r.style.setProperty('--vh',v.height+'px');r.style.setProperty('--vt',v.offsetTop+'px');const k=innerHeight-v.height>120;r.classList.toggle('kb',k);if(k&&!was)setTimeout(()=>{const n=getSelection().anchorNode;n&&n.parentElement&&n.parentElement.scrollIntoView({block:'nearest'})},60);was=k};v.addEventListener('resize',f);v.addEventListener('scroll',f);addEventListener('orientationchange',()=>setTimeout(f,300));f()})();
+(()=>{const ic=d=>'<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>',
+I={undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/>',redo:'<path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 000 12h3"/>',h2:'<path d="M5 5v14M13 5v14M5 12h8M17 9l3-2v10"/>',ul:'<path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/>',ol:'<path d="M10 6h10M10 12h10M10 18h10M4 5l1.5-1v5M4 14h3l-3 4h3"/>',ck:'<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',q:'<path d="M5 18v-6a5 5 0 015-5M14 18v-6a5 5 0 015-5"/>',tx:'<path d="M5 6h10M10 6v12M8 18h4M17 14l4 4M21 14l-4 4"/>'},
+b=(c,i)=>'<button class="ib" data-c="'+c+'">'+i+'</button>',sp='<i class="sp"></i>';
+$('#tb').innerHTML=b('undo',ic(I.undo))+b('redo',ic(I.redo))+sp+'<button class="ib" data-c="bold"><b>B</b></button><button class="ib" data-c="italic"><i>I</i></button><button class="ib" data-c="underline"><u>U</u></button><button class="ib" data-c="strikeThrough"><s>S</s></button>'+sp+b('h2',ic(I.h2))+b('insertUnorderedList',ic(I.ul))+b('insertOrderedList',ic(I.ol))+'<button class="ib" id="ckb">'+ic(I.ck)+'</button>'+b('blockquote',ic(I.q))+b('removeFormat',ic(I.tx))+'<span id="wc"></span>';
+$('#back').innerHTML=ic('<path d="M15 5l-7 7 7 7"/>');$('#nth').innerHTML=ic('<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>');$('#tsb').innerHTML=ic('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>');$('#xb').innerHTML=ic('<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>');$('#fm').innerHTML=ic('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>');
+const marks=()=>$('#ed').querySelectorAll(':scope>div,:scope>p,li').forEach(x=>x.toggleAttribute('data-ck',/^☑ /.test(x.textContent))),
+meta=()=>{const n=get();if(!n){$('#meta').textContent='';return}const d=new Date(n.t);$('#meta').textContent='Edited '+(d.toDateString()==new Date().toDateString()?d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString([],{day:'numeric',month:'short'}))};
+new MutationObserver(()=>{marks();meta()}).observe($('#ed'),{childList:true,subtree:true,characterData:true});
+const act=()=>{if(!cur)return;['bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList'].forEach(c=>{const x=$('#tb [data-c="'+c+'"]');x&&x.classList.toggle('on',document.queryCommandState(c))});['h2','blockquote'].forEach(c=>{const x=$('#tb [data-c="'+c+'"]');x&&x.classList.toggle('on',document.queryCommandValue('formatBlock').toLowerCase()==c)})};
+document.addEventListener('selectionchange',act);$('#tb').addEventListener('click',()=>{navigator.vibrate&&navigator.vibrate(6);act()});
+$('#ckb').onclick=()=>{if(!cur)return;const s=getSelection();s.modify('move','backward','paragraphboundary');const n=s.anchorNode,t=n&&n.nodeType==3?n.data.slice(s.anchorOffset,s.anchorOffset+2):'';if(/^[☐☑] /.test(t)){s.modify('extend','forward','character');s.modify('extend','forward','character');document.execCommand('delete')}else document.execCommand('insertText',false,'☐ ')};
+$('#ed').addEventListener('keydown',e=>{if(e.key!='Enter'||e.shiftKey)return;const s=getSelection(),n=s.anchorNode,bl=n&&(n.nodeType==3?n.parentElement:n).closest('#ed>div,#ed>p,#ed li');if(!bl||!/^[☐☑] /.test(bl.textContent))return;e.preventDefault();if(bl.textContent.trim().length<2){s.modify('move','backward','paragraphboundary');s.modify('extend','forward','character');s.modify('extend','forward','character');document.execCommand('delete')}else{document.execCommand('insertParagraph');document.execCommand('insertText',false,'☐ ')}});
+$('#ed').addEventListener('click',e=>{const s=getSelection(),t=s.anchorNode;if(!t||t.nodeType!=3||!s.isCollapsed||t.previousSibling||!/^[☐☑] /.test(t.data))return;const r=document.createRange();r.setStart(t,0);r.setEnd(t,1);const q=r.getBoundingClientRect();if(e.clientX<q.left-8||e.clientX>q.right+8||Math.abs(e.clientY-(q.top+q.height/2))>q.height)return;t.data=(t.data[0]=='☐'?'☑':'☐')+t.data.slice(1);$('#ed').dispatchEvent(new Event('input'));marks()});
+$('#fm').onclick=()=>{$('#app').classList.toggle('focus');toast($('#app').classList.contains('focus')?'Focus mode on':'Focus mode off')};
+let sx=0,sy=0;addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});addEventListener('touchend',e=>{const t=e.changedTouches[0];if(cur&&sx<28&&t.clientX-sx>80&&Math.abs(t.clientY-sy)<60&&innerWidth<820)closeNote()},{passive:true})})();
 </script></body></html>
