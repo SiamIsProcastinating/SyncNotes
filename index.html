@@ -184,6 +184,10 @@ mark{background:color-mix(in srgb,var(--ac) 38%,transparent)}
 #wc{color:var(--ac)}
 button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
 .pop button:hover,.sheet button:hover,.btn:hover{background:color-mix(in srgb,var(--ac) 14%,transparent)}
+#stbar{height:8px;border-radius:99px;background:var(--ln);overflow:hidden}
+#stbar i{display:block;height:100%;width:1%;min-width:3px;border-radius:99px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .7s var(--sp)}
+#stt{color:var(--mut);font-size:14px;line-height:1.7;margin-top:10px}
+#stp[hidden]{display:none}
 </style></head>
 <body>
 <div id="bg"><div id="bgb"></div><img id="bgi" alt="" style="display:none"></div><div id="dim"></div>
@@ -210,14 +214,33 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
  <label>Text size <input type="range" id="fz" min="14" max="26"></label>
  <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button><button id="ud" hidden>Use app background for this note</button>
  <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Accent colour</h3><div id="acv"><span>Live preview</span><i>Done</i></div><div id="dots" class="dots"></div><div class="row" style="gap:8px;padding-top:4px"><label class="btn" style="display:flex;align-items:center;gap:8px;flex:1">Custom <input type="color" id="acc" style="border:0;width:34px;height:26px;background:none;padding:0"></label><button id="acg" style="flex:1"></button></div></div>
- <div id="dat" class="tp tabhide" data-t="data"><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
- <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.04</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
+ <div id="dat" class="tp tabhide" data-t="data"><h3>Device storage</h3><div style="padding:2px 12px 8px"><div id="stbar"><i></i></div><div id="stt"></div></div><button id="stp" hidden></button><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
+ <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.05</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
 </div></div>
 <div id="ts"></div>
 <script>
+window.KV={};window.IDBOK=false;
+window.KVR=(async()=>{const K=['sn_n','sn_b','sn_s'],LS=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+try{
+ const db=await new Promise((res,rej)=>{const r=indexedDB.open('notes-db',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);r.onblocked=()=>rej('blocked')});
+ const get=k=>new Promise(res=>{try{const r=db.transaction('kv').objectStore('kv').get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>res(undefined)}catch(e){res(undefined)}}),
+ put=(k,v)=>new Promise((res,rej)=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').put(v,k);t.oncomplete=res;t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)});
+ for(const k of K)KV[k]=await get(k);
+ if(!LS('sn_mig')){let ok=true;
+  for(const k of K)if(KV[k]==null){const v=LS(k);if(v!=null){KV[k]=v;try{await put(k,v)}catch(e){ok=false}}}
+  if(ok)for(const k of K)if(KV[k]!=null&&JSON.stringify(await get(k))!==JSON.stringify(KV[k]))ok=false;
+  if(ok){try{const o=localStorage.getItem('sn_n');if(o)localStorage.setItem('sn_n_backup',o);['sn_n','sn_b','sn_s'].forEach(k=>localStorage.removeItem(k));localStorage.setItem('sn_mig','1')}catch(e){}}
+  else throw 'migration';}
+ window.idbPut=put;window.IDBOK=true;
+}catch(e){window.IDBOK=false;for(const k of K){const v=LS(k);if(KV[k]==null&&v!=null)KV[k]=v}}
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+})().catch(()=>{});
+</script>
+<script>
+(async()=>{await KVR;
 const $=s=>document.querySelector(s),esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const ls=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
-const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return 1}catch(e){toast('Storage full');return 0}};
+const ls=(k,d)=>KV[k]??d;
+const sv=(k,v)=>{KV[k]=v;if(IDBOK){idbPut(k,v).catch(()=>toast("Couldn't save to device storage"))}else{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('Storage full');return 0}}return 1};
 let notes=ls('sn_n',[]),bgs=ls('sn_b',[]),S=Object.assign({theme:'auto',dim:30,blur:0,tx:'l',ts:true},ls('sn_s',{})),cur=null,q='',w,armed=0,rr,pt,sm='g';
 const TG=()=>{const n=get();if(sm=='n'&&n){if(!n.th)n.th=Object.assign({},S);return n.th}return S};
 const sav=()=>{sv('sn_s',S);if(sm=='n'&&get()){get().t=Date.now();sv('sn_n',notes);push()}};
@@ -232,7 +255,8 @@ function apply(){const n0=get(),E=sm=='g'&&!$('#sh').hidden?S:(n0&&n0.th?n0.th:S
  bg.style.filter=p&&E.blur>0?'blur('+E.blur+'px)':'none';$('#dim').style.background=p?'rgba('+(L?'0,0,0':'255,255,255')+','+E.dim/100+')':'transparent';
  $('#fit').hidden=!bgs.some(b=>b.id==Tg.theme);$('#fit').textContent='Photo: '+({auto:'Auto (blend or fill)',fit:'Fit whole photo, blended edges',fill:'Fill screen (crop)'})[Tg.fit||'auto'];$('#dm').value=Tg.dim;$('#bl').value=Tg.blur;document.body.classList.toggle('ts',S.ts!==false);$('#sht').textContent=sm=='n'?'Background for this note':'App background (list)';$('#dat').hidden=sm=='n';$('#ud').hidden=!(sm=='n'&&n0&&n0.th);
  $('#sw').innerHTML=TH.map(x=>'<div class="sw'+(x.id==Tg.theme?' on':'')+'" data-t="'+x.id+'" style="background:'+x.c+'">'+x.n+'</div>').join('')+
-  bgs.map(b=>'<div class="sw'+(b.id==Tg.theme?' on':'')+'" data-t="'+b.id+'" style="background-image:url(&quot;'+b.img+'&quot;)"><u data-d="'+b.id+'">×</u></div>').join('')}
+  bgs.map(b=>'<div class="sw'+(b.id==Tg.theme?' on':'')+'" data-t="'+b.id+'" style="background-image:url(&quot;'+(b.th||b.img)+'&quot;)"><u data-d="'+b.id+'">×</u></div>').join('')}
+const thumb=c=>{const s=160/Math.max(c.width,c.height),t=document.createElement('canvas');t.width=Math.round(c.width*s);t.height=Math.round(c.height*s);t.getContext('2d').drawImage(c,0,0,t.width,t.height);return t.toDataURL('image/jpeg',.7)};
 const lumOf=s=>{const m=s.match(/\d+/g);return(.299*m[0]+.587*m[1]+.114*m[2])/255};
 function edges(im){const W=48,H=Math.max(9,Math.round(48*im.height/im.width)),cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');x.drawImage(im,0,0,W,H);
  const avg=(sx,sy,sw,sh)=>{const d=x.getImageData(sx,sy,sw,sh).data;let r=0,g=0,b=0;const n=d.length/4;for(let i=0;i<d.length;i+=4){r+=d[i];g+=d[i+1];b+=d[i+2]}return'rgb('+(r/n|0)+','+(g/n|0)+','+(b/n|0)+')'};
@@ -341,12 +365,12 @@ $('#fz').oninput=e=>{S.fs=+e.target.value;sv('sn_s',S);apply()};
 $('#fit').onclick=()=>{const T=TG();T.fit=({auto:'fit',fit:'fill',fill:'auto'})[T.fit||'auto'];sav();apply()};
 $('#ph').onchange=e=>{const f=e.target.files[0];if(!f)return;const u=URL.createObjectURL(f),im=new Image();e.target.value='';
  im.onerror=()=>{URL.revokeObjectURL(u);toast('Cannot read this photo. Try a JPG or PNG')};
- im.onload=()=>{try{const s=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
-  const ec=edges(c),b={id:'p'+Date.now(),img:c.toDataURL('image/jpeg',.8),w:c.width,h:c.height,c:ec,lum:lumOf(ec.m)};
+ im.onload=()=>{try{const s=Math.min(1,1920/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
+  const ec=edges(c),b={id:'p'+Date.now(),img:c.toDataURL('image/jpeg',.86),w:c.width,h:c.height,c:ec,lum:lumOf(ec.m),th:thumb(c)};
   bgs.push(b);if(!sv('sn_b',bgs)){bgs.pop();return}const T=TG();T.theme=b.id;T.tx=b.lum>.6?'d':'l';T.fit=T.fit||'auto';sav();apply();toast('Photo added')}catch(x){toast('Photo failed: '+(x&&x.message||x))}};im.src=u};
 $('#ph').onchangeOld=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{
- const s=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);
- const x=document.createElement('canvas');x.width=x.height=16;const g=x.getContext('2d');g.drawImage(im,0,0,16,16);const px=g.getImageData(0,0,16,16).data;let lu=0;for(let i=0;i<px.length;i+=4)lu+=.299*px[i]+.587*px[i+1]+.114*px[i+2];const b={id:'p'+Date.now(),img:c.toDataURL('image/jpeg',.8),lum:lu/256/255};bgs.push(b);if(!sv('sn_b',bgs)){bgs.pop();return}const T=TG();T.theme=b.id;T.tx=b.lum>.6?'d':'l';sav();apply()};im.src=r.result};r.readAsDataURL(f);e.target.value=''};
+ const s=Math.min(1,1920/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+ const x=document.createElement('canvas');x.width=x.height=16;const g=x.getContext('2d');g.drawImage(im,0,0,16,16);const px=g.getImageData(0,0,16,16).data;let lu=0;for(let i=0;i<px.length;i+=4)lu+=.299*px[i]+.587*px[i+1]+.114*px[i+2];const b={id:'p'+Date.now(),img:c.toDataURL('image/jpeg',.86),lum:lu/256/255};bgs.push(b);if(!sv('sn_b',bgs)){bgs.pop();return}const T=TG();T.theme=b.id;T.tx=b.lum>.6?'d':'l';sav();apply()};im.src=r.result};r.readAsDataURL(f);e.target.value=''};
 $('#ea').onclick=()=>save('all-notes.md',live().sort((a,b)=>b.t-a.t).map(n=>mdOf(n.html)).join('\n\n---\n\n'));
 $('#eb').onclick=()=>save('notes-backup.json',JSON.stringify(live()));
 const ms=v=>typeof v=='number'?(v<1e11?v*1000:v):(Date.parse(v)||Date.now()),h=(s,ct)=>s.split(/\r?\n/).map(l=>'<div data-t="'+ct+'">'+(esc(l)||'<br>')+'</div>').join('');
@@ -439,4 +463,13 @@ open=function(id){_op(id);const e=$('#ed');e.classList.remove('swp');void e.offs
 closeNote=function(){cm();cd();bot.classList.remove('open');if(lv)return;if(innerWidth<820&&cur&&$('#app').classList.contains('open')){lv=1;$('.main').classList.add('out');setTimeout(()=>{lv=0;$('.main').classList.remove('out');_cn()},190)}else _cn()};
 $('#back').onclick=()=>closeNote()}
 render()})();
-</script></body></html>
+
+(()=>{const fb=n=>n<=0?'0 KB':n>1e9?(n/1e9).toFixed(1)+' GB':n>1e6?(n/1e6).toFixed(1)+' MB':Math.max(1,Math.round(n/1e3))+' KB',NS=navigator.storage;
+async function stor(){const e=NS&&NS.estimate?await NS.estimate():{},pr=NS&&NS.persisted?await NS.persisted():false,nb=new Blob([JSON.stringify(notes)]).size,pb=bgs.reduce((a,b)=>a+(b.img||'').length+(b.th||'').length,0);
+ $('#stbar i').style.width=e.quota?Math.max(1,Math.min(100,e.usage/e.quota*100))+'%':'1%';
+ $('#stt').innerHTML='Notes: '+live().length+' ('+fb(nb)+')<br>Photos: '+bgs.length+' ('+fb(pb)+')'+(e.quota?'<br>App uses '+fb(e.usage)+' of about '+fb(e.quota)+' free on this device':'')+'<br>'+(IDBOK?'Saved in the device database':'Saved in basic browser storage (about 5 MB limit)')+(pr?'. Protected from automatic clean-up.':'');
+ $('#stp').hidden=pr||!(NS&&NS.persist);$('#stp').textContent='Protect storage from automatic clean-up'}
+$('#stp').onclick=async()=>{let g=false;try{g=await NS.persist()}catch(e){}toast(g?'Storage is now protected':'Not granted. Installing the app to your home screen usually helps');stor()};
+$('#tabs').addEventListener('click',e=>{if(e.target.dataset.t=='data')stor()});
+bgs.filter(b=>!b.th&&b.img).forEach(b=>{const im=new Image();im.onload=()=>{b.th=thumb(im);sv('sn_b',bgs);apply()};im.src=b.img})})();
+})();</script></body></html>
