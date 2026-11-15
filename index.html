@@ -2,14 +2,14 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Notes</title>
-<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#121214"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#15161a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Notes"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{--fg:#1c1c1e;--mut:#6b6b70;--card:rgba(255,255,255,.62);--ln:rgba(0,0,0,.1);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--fg:#f5f5f7;--mut:#c4c4ca;--card:rgba(20,20,26,.55);--ln:rgba(255,255,255,.14)}}
 :root[data-theme="dark"]{--fg:#f5f5f7;--mut:#c4c4ca;--card:rgba(20,20,26,.55);--ln:rgba(255,255,255,.14)}
 *{box-sizing:border-box}html,body{height:100%;margin:0}
 body{font:16px/1.5 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;color:var(--fg);overflow:hidden;background:transparent}
-#bg{position:fixed;inset:-24px;z-index:-2;background:#f6f6f3}#dim{position:fixed;inset:0;z-index:-1}
+#bg{position:fixed;inset:-24px;z-index:-2;background:#f6f6f3;overflow:hidden}#dim{position:fixed;inset:0;z-index:-1}
 .app{height:100%;display:flex}.side,.main{display:flex;flex-direction:column;min-width:0;height:100%;padding:10px;gap:8px}
 .side{width:100%}.main{display:none;width:100%}.open .side{display:none}.open .main{display:flex}
 @media(min-width:820px){.side{width:340px;flex:none}.main{display:flex;flex:1}}
@@ -53,9 +53,18 @@ mark{background:rgba(255,214,10,.55);color:inherit;border-radius:3px}
 @media(min-width:820px){.side,.main{padding:14px}}
 @media(max-width:600px){#ed{padding:16px 14px}.ts #ed>div,.ts #ed>p,.ts #ed>h2,.ts #ed>blockquote{padding-right:46px}.ts #ed>ul,.ts #ed>ol{margin-right:46px}.ts #ed li::after{right:-46px}#ed [data-l]::after{width:42px;font-size:9.5px}}
 #bgi{max-width:none;pointer-events:none;user-select:none}
+#bgb{position:absolute;inset:-60px;display:none;background-size:cover;background-position:center;filter:blur(38px) saturate(1.15);transform:translateZ(0)}
+#ed [data-day]{margin-top:12px}#ed>[data-day]:first-child{margin-top:0}
+#ed [data-day]::before{content:attr(data-day);display:block;box-sizing:border-box;height:40px;padding-top:10px;line-height:22px;border-top:1px solid var(--ln);font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);pointer-events:none;user-select:none;-webkit-user-select:none}
+#ed>[data-day]:first-child::before{border-top-color:transparent}
+#ed ul[data-day]::before,#ed ol[data-day]::before{margin-left:-40px}
+.ts #ed [data-day]::before{margin-right:-58px}
+#ed [data-day]::after{top:calc(.55em + 40px)}
+#ed li[data-dl]{border-top:1px solid var(--ln);margin-top:.8em;padding-top:.5em}#ed li[data-dl]::after{top:calc(1.05em + 1px)}
+@media(max-width:600px){.ts #ed [data-day]::before{margin-right:-46px}}
 </style></head>
 <body>
-<div id="bg"><img id="bgi" alt="" style="display:none"></div><div id="dim"></div>
+<div id="bg"><div id="bgb"></div><img id="bgi" alt="" style="display:none"></div><div id="dim"></div>
 <div class="app" id="app">
  <div class="side">
   <div class="row"><div class="glass row" style="flex:1"><input type="search" id="q" placeholder="Search: cat -dog tag:work"></div>
@@ -79,7 +88,7 @@ mark{background:rgba(255,214,10,.55);color:inherit;border-radius:3px}
  <label>Text size <input type="range" id="fz" min="14" max="26"></label>
  <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button><button id="ud" hidden>Use app background for this note</button>
  <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label>
- <div id="dat"><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
+ <div id="dat"><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
  <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label></div><button id="cl">Done</button>
 </div></div>
 <div id="ts"></div>
@@ -99,7 +108,7 @@ function apply(){const n0=get(),E=sm=='g'&&!$('#sh').hidden?S:(n0&&n0.th?n0.th:S
  r.setProperty('--card',L?'rgba(20,20,26,.55)':'rgba(255,255,255,.62)');r.setProperty('--ln',L?'rgba(255,255,255,.14)':'rgba(0,0,0,.1)');
  const bg=$('#bg');paint(bg,p,E,t,L);
  bg.style.filter=p&&E.blur>0?'blur('+E.blur+'px)':'none';$('#dim').style.background=p?'rgba('+(L?'0,0,0':'255,255,255')+','+E.dim/100+')':'transparent';
- $('#fit').hidden=!bgs.some(b=>b.id==Tg.theme);$('#fit').textContent='Photo: '+({auto:'Auto (fit or fill)',fit:'Fit whole photo',fill:'Fill (crop)'})[Tg.fit||'auto'];$('#dm').value=Tg.dim;$('#bl').value=Tg.blur;document.body.classList.toggle('ts',S.ts!==false);$('#sht').textContent=sm=='n'?'Background for this note':'App background (list)';$('#dat').hidden=sm=='n';$('#ud').hidden=!(sm=='n'&&n0&&n0.th);
+ $('#fit').hidden=!bgs.some(b=>b.id==Tg.theme);$('#fit').textContent='Photo: '+({auto:'Auto (blend or fill)',fit:'Fit whole photo, blended edges',fill:'Fill screen (crop)'})[Tg.fit||'auto'];$('#dm').value=Tg.dim;$('#bl').value=Tg.blur;document.body.classList.toggle('ts',S.ts!==false);$('#sht').textContent=sm=='n'?'Background for this note':'App background (list)';$('#dat').hidden=sm=='n';$('#ud').hidden=!(sm=='n'&&n0&&n0.th);
  $('#sw').innerHTML=TH.map(x=>'<div class="sw'+(x.id==Tg.theme?' on':'')+'" data-t="'+x.id+'" style="background:'+x.c+'">'+x.n+'</div>').join('')+
   bgs.map(b=>'<div class="sw'+(b.id==Tg.theme?' on':'')+'" data-t="'+b.id+'" style="background-image:url(&quot;'+b.img+'&quot;)"><u data-d="'+b.id+'">×</u></div>').join('')}
 const lumOf=s=>{const m=s.match(/\d+/g);return(.299*m[0]+.587*m[1]+.114*m[2])/255};
@@ -107,18 +116,19 @@ function edges(im){const W=48,H=Math.max(9,Math.round(48*im.height/im.width)),cv
  const avg=(sx,sy,sw,sh)=>{const d=x.getImageData(sx,sy,sw,sh).data;let r=0,g=0,b=0;const n=d.length/4;for(let i=0;i<d.length;i+=4){r+=d[i];g+=d[i+1];b+=d[i+2]}return'rgb('+(r/n|0)+','+(g/n|0)+','+(b/n|0)+')'};
  const hh=Math.floor(H/3),ww=Math.floor(W/3),k=f=>[0,1,2].map(f);
  return{l:k(i=>avg(0,i*hh,3,hh)),r:k(i=>avg(W-3,i*hh,3,hh)),t:k(i=>avg(i*ww,0,ww,3)),b:k(i=>avg(i*ww,H-3,ww,3)),m:avg(0,0,W,H)}}
-function paint(bg,p,E,t,L){const bi=$('#bgi');bi.style.display='none';
+function paint(bg,p,E,t,L){const bi=$('#bgi'),bb=$('#bgb');bi.style.display='none';bb.style.display='none';
  if(!p){bg.style.background=t.k=='auto'?(L?'#121214':'#f6f6f3'):t.c;return}
  const W=bg.clientWidth||innerWidth+48,H=bg.clientHeight||innerHeight+48,m=E.fit||'auto';
- const fit=p.c&&(m=='fit'||(m=='auto'&&Math.abs(Math.log((p.w/p.h)/(W/H)))>.2));
+ const fit=p.w&&p.h&&(m=='fit'||(m=='auto'&&Math.abs(Math.log((p.w/p.h)/(W/H)))>.2));
  const cover=()=>{bg.style.background='center/cover url("'+p.img+'")'};
  if(!fit)return cover();
  const sc=Math.min(W/p.w,H/p.h),dw=p.w*sc,dh=p.h*sc,gx=(W-dw)/2,gy=(H-dh)/2;
  if(Math.max(gx,gy)<4)return cover();
- const c=p.c,hz=gx>gy,fe=(hz?dw:dh)*.07,g=(a,k)=>'linear-gradient('+a+','+c[k].join(',')+')',mk='linear-gradient('+(hz?'90deg':'180deg')+',transparent,#000 7%,#000 93%,transparent)';
- bg.style.background=hz?g('180deg','l')+' left/'+(gx+fe)+'px 100% no-repeat,'+g('180deg','r')+' right/'+(gx+fe)+'px 100% no-repeat,'+c.m:g('90deg','t')+' top/100% '+(gy+fe)+'px no-repeat,'+g('90deg','b')+' bottom/100% '+(gy+fe)+'px no-repeat,'+c.m;
+ const hz=gx>gy,fe=Math.round(Math.max(28,Math.min(dw,dh)*.14)),ramp=a=>'linear-gradient('+a+',transparent,#000 '+fe+'px,#000 calc(100% - '+fe+'px),transparent)',sol='linear-gradient(#000,#000)',mk=hz?ramp('90deg')+','+sol:sol+','+ramp('180deg');
+ bg.style.background=p.c?p.c.m:(L?'#121214':'#f6f6f3');
+ bb.style.backgroundImage='url("'+p.img+'")';bb.style.display='block';
  if(bi.dataset.s!=p.id){bi.src=p.img;bi.dataset.s=p.id}
- bi.style.cssText='display:block;position:absolute;left:'+gx+'px;top:'+gy+'px;width:'+dw+'px;height:'+dh+'px;-webkit-mask-image:'+mk+';mask-image:'+mk}
+ bi.style.cssText='display:block;position:absolute;left:'+gx+'px;top:'+gy+'px;width:'+dw+'px;height:'+dh+'px;-webkit-mask-image:'+mk+';mask-image:'+mk+';-webkit-mask-composite:source-in;mask-composite:intersect'}
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(apply,150)});
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change',apply);
 const fmt=t=>{const d=new Date(t),n=new Date(),h=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});return d.toDateString()==n.toDateString()?h:d.toLocaleDateString([],d.getFullYear()==n.getFullYear()?{day:'numeric',month:'short'}:{day:'numeric',month:'short',year:'2-digit'})+'\n'+h};
@@ -141,37 +151,28 @@ function stamp(){const ed=$('#ed'),s=getSelection();
  const B=[...ed.querySelectorAll(':scope>div,:scope>p,:scope>h2,:scope>blockquote,li')];let cb=s.anchorNode;while(cb&&!B.includes(cb))cb=cb.parentNode;
  const now=Date.now(),seen={};B.forEach(b=>{if(b!==cb&&b.dataset.t)seen[b.dataset.t]=1});
  if(cb&&(!cb.dataset.t||seen[cb.dataset.t]))cb.dataset.t=now;
- B.forEach(b=>{if(!b.dataset.t)b.dataset.t=now;b.dataset.l=fmt(+b.dataset.t)})}
+ B.forEach(b=>{if(!b.dataset.t)b.dataset.t=now;b.dataset.l=fmt(+b.dataset.t)});days()}
+const dayLbl=t=>{const d=new Date(t),n=new Date(),y=new Date(n);y.setDate(n.getDate()-1);const s=d.toDateString(),b=d.toLocaleDateString([],{weekday:'short',day:'numeric',month:'short',...(d.getFullYear()!=n.getFullYear()?{year:'numeric'}:{})});return s==n.toDateString()?'Today · '+b:s==y.toDateString()?'Yesterday · '+b:b};
+function days(){const ed=$('#ed');ed.querySelectorAll('[data-day],[data-dl]').forEach(e=>{e.removeAttribute('data-day');e.removeAttribute('data-dl')});let prev='';
+ ed.querySelectorAll(':scope>div,:scope>p,:scope>h2,:scope>blockquote,li').forEach(b=>{const t=+b.dataset.t;if(!t)return;const k=new Date(t).toDateString();if(k==prev)return;prev=k;
+  if(b.tagName=='LI'){const l=b.parentNode;if(l.firstElementChild===b&&l.parentNode===ed)l.setAttribute('data-day',dayLbl(t));else b.setAttribute('data-dl','1')}else b.setAttribute('data-day',dayLbl(t))})}
 function render(){const P=parseQ(q),L=live().map(n=>({n,s:P.length?hit(n,P):1})).filter(x=>x.s).sort((a,b)=>(b.n.pin||0)-(a.n.pin||0)||b.s-a.s||b.n.t-a.n.t).map(x=>x.n);
  $('#list').innerHTML=L.map(n=>{const tx=txt(n.html).trim(),l=tx.split('\n').filter(Boolean),t0=P.find(p=>!p.neg&&!p.tag),sn=t0&&!(l[0]||'').toLowerCase().includes(t0.v)?snip(tx,P):null;
   return'<div class="it'+(n.id==cur?' on':'')+'" data-id="'+n.id+'"><b>'+(n.pin?'★ ':'')+hl(l[0]||'New note',P)+'</b><span>'+hl(sn||(l[1]||'').slice(0,90),P)+'</span><i>'+new Date(n.t).toLocaleDateString()+(n.tags||[]).map(t=>'<em data-tag="'+esc(t)+'">#'+esc(t)+'</em>').join('')+'</i></div>'}).join('')||'<p class="em">'+(q?'Nothing found.':'No notes yet. Tap + to write one.')+'</p>';
  const n=get();$('#pin').textContent=n&&n.pin?'★':'☆';tags()}
-function open(id){cur=id;const n=get();$('#ed').innerHTML=clean(n.html)||'<div><br></div>';$('#ed').contentEditable=true;$('#app').classList.add('open');apply();render()}
+function open(id){cur=id;const n=get();$('#ed').innerHTML=clean(n.html)||'<div><br></div>';days();$('#ed').contentEditable=true;$('#app').classList.add('open');apply();render()}
 function newNote(){const n={id:Math.random().toString(36).slice(2,9)+Date.now().toString(36),html:'',t:Date.now()};notes.push(n);open(n.id);$('#ed').focus()}
 function closeNote(){const n=get();if(n&&!txt(n.html).trim()){n.del=1;n.t=Date.now();sv('sn_n',notes);push()}cur=null;apply();$('#ed').innerHTML='';$('#ed').contentEditable=false;$('#app').classList.remove('open');render()}
+function push(){if(!rr)return;clearTimeout(pt);pt=setTimeout(()=>{const cut=Date.now()-2592e6;rr.set({json:JSON.stringify(notes.filter(n=>!n.del||n.t>cut))}).catch(()=>{})},1200)}
 function merge(a){const m={};a.forEach(r=>m[r.id]=r);let ch=0,need=0;
  a.forEach(r=>{const l=notes.find(n=>n.id==r.id);if(!l){notes.push(r);ch=1}else if(r.t>l.t){Object.assign(l,r);ch=1}});
  notes.forEach(n=>{const r=m[n.id];if(!r||n.t>r.t)need=1});
- if(ch){sv('sn_n',notes);const n=get();if(n&&n.del)closeNote();else if(n&&document.activeElement!=$('#ed'))$('#ed').innerHTML=clean(n.html);render()}return need}
-const GH='https://api.github.com';let gid=localStorage.getItem('sn_gid')||'',busy=0;
-const tk=()=>localStorage.getItem('sn_tk')||'',setSync=m=>{$('#sst').textContent=m};
-async function gh(p,o){const r=await fetch(GH+p,Object.assign({headers:{Authorization:'Bearer '+tk(),Accept:'application/vnd.github+json'}},o));if(!r.ok)throw r.status;return r.json()}
-function push(){clearTimeout(pt);pt=setTimeout(sync,1500)}
-async function sync(){if(!tk()||busy)return;busy=1;setSync('Syncing…');try{
- if(!gid){const l=await gh('/gists?per_page=100'),g=l.find(x=>x.description=='notes-app-sync'&&x.files['notes.json']);if(g){gid=g.id;localStorage.setItem('sn_gid',gid)}}
- let remote=[];if(gid){const g=await gh('/gists/'+gid),f=g.files['notes.json'];if(f){let c=f.content;if(f.truncated)c=await(await fetch(f.raw_url)).text();remote=JSON.parse(c||'[]')}}
- const need=merge(remote);
- if(need||!gid){const cut=Date.now()-2592e6,files={'notes.json':{content:JSON.stringify(notes.filter(n=>!n.del||n.t>cut))}};
-  if(gid)await gh('/gists/'+gid,{method:'PATCH',body:JSON.stringify({files})});
-  else{const g=await gh('/gists',{method:'POST',body:JSON.stringify({description:'notes-app-sync',public:false,files})});gid=g.id;localStorage.setItem('sn_gid',gid)}}
- setSync('Synced '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}))}
- catch(e){if(e==404){gid='';localStorage.removeItem('sn_gid')}setSync(e==401||e==403?'Token not valid or missing gist permission':'Sync failed (offline?)')}busy=0}
-function initSync(){sync();setInterval(sync,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync()});addEventListener('online',sync);
- $('#tki').value=tk()?'••••••••':'';
- $('#tks').onclick=()=>{const v=$('#tki').value.trim();if(v&&!v.startsWith('•')){localStorage.setItem('sn_tk',v);gid='';localStorage.removeItem('sn_gid')}if(!tk()){setSync('Paste a token first');return}sync()};
- $('#tkx').onclick=()=>{localStorage.removeItem('sn_tk');localStorage.removeItem('sn_gid');gid='';$('#tki').value='';setSync('Sync off')}}
+ if(ch){sv('sn_n',notes);const n=get();if(n&&n.del)closeNote();else if(n&&document.activeElement!=$('#ed')){$('#ed').innerHTML=clean(n.html);days()}render()}if(need)push()}
+async function initSync(){try{if(!window.claude)return;const u=await claude.use('user'),db=await claude.use('db'),id=u&&await u.id();if(!db||!id)return;
+ rr=db.collection('data/users/'+id).doc('notes');rr.onSnapshot(s=>{if(s.exists)merge(JSON.parse(s.data().json||'[]'));else push()},()=>{})}catch(e){}}
 async function copy(s){try{await navigator.clipboard.writeText(s)}catch(e){const t=document.createElement('textarea');t.value=s;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}toast('Copied')}
-function save(name,data){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data]));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Saved')}
+async function save(name,data){let d=null;try{d=window.claude&&await claude.use('downloads')}catch(e){}
+ if(d){try{await d.save({filename:name,data});toast('Saved')}catch(e){toast('Not saved')}}else{try{const b=new Blob([data],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Saved')}catch(e){if(typeof data=='string')copy(data)}}}
 const fname=n=>(txt(n.html).trim().split('\n')[0]||'note').replace(/[^\w\- ]+/g,'').trim().slice(0,40)||'note';
 $('#q').oninput=e=>{q=e.target.value.toLowerCase();render()};
 $('#list').onclick=e=>{const g=e.target.dataset.tag;if(g){$('#q').value='tag:'+g;q=$('#q').value.toLowerCase();render();return}const i=e.target.closest('.it');if(i)open(i.dataset.id)};
@@ -221,5 +222,5 @@ $('#es').onclick=()=>save('simplenote-import.json',JSON.stringify({activeNotes:l
 $('#rs').onchangeOld=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const a=JSON.parse(t);if(!Array.isArray(a))throw 0;a.forEach(r=>{if(r&&r.id&&typeof r.html=='string'){r.t=Date.now();const l=notes.find(n=>n.id==r.id);l?Object.assign(l,r):notes.push(r)}});
  sv('sn_n',notes);render();push();toast('Restored')}catch(x){toast('Not a valid backup')}});e.target.value=''};
 document.addEventListener('keydown',e=>{if(e.key=='Escape'){if(!$('#sh').hidden){$('#sh').hidden=true;apply()}else if(cur)closeNote()}});document.execCommand('defaultParagraphSeparator',false,'div');$('#ed').contentEditable=false;apply();render();initSync();
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>
