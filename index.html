@@ -215,7 +215,7 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
  <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button><button id="ud" hidden>Use app background for this note</button>
  <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Accent colour</h3><div id="acv"><span>Live preview</span><i>Done</i></div><div id="dots" class="dots"></div><div class="row" style="gap:8px;padding-top:4px"><label class="btn" style="display:flex;align-items:center;gap:8px;flex:1">Custom <input type="color" id="acc" style="border:0;width:34px;height:26px;background:none;padding:0"></label><button id="acg" style="flex:1"></button></div></div>
  <div id="dat" class="tp tabhide" data-t="data"><h3>Device storage</h3><div style="padding:2px 12px 8px"><div id="stbar"><i></i></div><div id="stt"></div></div><button id="stp" hidden></button><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
- <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.06</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
+ <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.07</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
 </div></div>
 <div id="ts"></div>
 <script>
@@ -294,10 +294,11 @@ function snip(tx,P){const t=P.find(p=>!p.neg&&!p.tag);if(!t)return null;const i=
 function tags(){const n=get(),T=n&&n.tags||[];$('#bot').hidden=!n;[...$('#tg').querySelectorAll('.tc')].forEach(x=>x.remove());T.forEach(t=>{const s=document.createElement('span');s.className='tc';s.textContent='#'+t;const u=document.createElement('u');u.textContent='×';u.dataset.r=t;s.appendChild(u);$('#tg').insertBefore(s,$('#tgi'))});$('#tgs').innerHTML=T.length?T.slice(0,3).map(t=>'<em>#'+esc(t)+'</em>').join('')+(T.length>3?'<em>+'+(T.length-3)+'</em>':''):'Add tags';if(!n)$('#bot').classList.remove('open')}
 function stamp(){const ed=$('#ed'),s=getSelection();
  [...ed.childNodes].forEach(c=>{if(c.nodeType==3&&c.textContent.trim()){const a=s.anchorNode,o=s.anchorOffset,d=document.createElement('div');c.replaceWith(d);d.appendChild(c);if(a==c)s.collapse(c,o)}});
- const B=[...ed.querySelectorAll(':scope>div,:scope>p,:scope>h2,:scope>blockquote,li')];let cb=s.anchorNode;while(cb&&!B.includes(cb))cb=cb.parentNode;
- const now=Date.now(),seen={};B.forEach(b=>{if(b!==cb&&b.dataset.t)seen[b.dataset.t]=1});
- if(cb&&(!cb.dataset.t||seen[cb.dataset.t]))cb.dataset.t=now;
- B.forEach(b=>{if(!b.dataset.t)b.dataset.t=now;b.dataset.l=fmt(+b.dataset.t)});days()}
+ const B=[...ed.querySelectorAll(':scope>div,:scope>p,:scope>h2,:scope>blockquote,li')],sn=window.__snap||[];window.__snap=null;let nn=Date.now();const nt=()=>nn++,emp=b=>!b.textContent.trim()&&!b.querySelector('img');
+ B.forEach(b=>{if(!b.dataset.t){const k=b.textContent.trim(),i=k?sn.findIndex(x=>x.k==k):-1;if(i>-1){b.dataset.t=sn[i].t;sn.splice(i,1)}}});
+ const g={};B.forEach(b=>{const t=b.dataset.t;if(t)(g[t]=g[t]||[]).push(b)});
+ Object.values(g).forEach(a=>{a=a.filter(x=>!a.some(y=>y!==x&&(y.contains(x)||x.contains(y))));if(a.length>1){const k=a.find(b=>!emp(b))||a[0];a.forEach(b=>{if(b!==k)b.dataset.t=nt()})}});
+ B.forEach(b=>{if(!b.dataset.t)b.dataset.t=nt();b.dataset.l=fmt(+b.dataset.t)});days()}
 const dayLbl=t=>{const d=new Date(t),n=new Date(),y=new Date(n);y.setDate(n.getDate()-1);const s=d.toDateString(),b=d.toLocaleDateString([],{weekday:'short',day:'numeric',month:'short',...(d.getFullYear()!=n.getFullYear()?{year:'numeric'}:{})});return s==n.toDateString()?'Today · '+b:s==y.toDateString()?'Yesterday · '+b:b};
 function days(){const ed=$('#ed');ed.querySelectorAll('[data-day],[data-dl]').forEach(e=>{e.removeAttribute('data-day');e.removeAttribute('data-dl')});let prev='';
  ed.querySelectorAll(':scope>div,:scope>p,:scope>h2,:scope>blockquote,li').forEach(b=>{const t=+b.dataset.t;if(!t)return;const k=new Date(t).toDateString();if(k==prev)return;prev=k;
@@ -499,4 +500,8 @@ new ResizeObserver(pad).observe(ed);pad();
 ed.addEventListener('input',()=>go(false));
 ed.addEventListener('keyup',e=>{if(/^(Enter|Arrow|Page)/.test(e.key))go(true)});
 if(window.visualViewport)visualViewport.addEventListener('resize',()=>go(false))})();
+
+// keep old time stamps when a line changes type (heading, list, quote...)
+(()=>{const snap=()=>{window.__snap=[...$('#ed').querySelectorAll(':scope>div,:scope>p,:scope>h2,:scope>blockquote,li')].map(b=>({k:b.textContent.trim(),t:b.dataset.t})).filter(x=>x.k&&x.t);setTimeout(()=>{window.__snap=null},1500)};
+['mousedown','touchstart'].forEach(e=>$('#tb').addEventListener(e,snap,true))})();
 })();</script></body></html>
