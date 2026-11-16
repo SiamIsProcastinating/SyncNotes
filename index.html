@@ -188,6 +188,56 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
 #stbar i{display:block;height:100%;width:1%;min-width:3px;border-radius:99px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .7s var(--sp)}
 #stt{color:var(--mut);font-size:14px;line-height:1.7;margin-top:10px}
 #stp[hidden]{display:none}
+
+/* ===== Update 1.08 ===== */
+.card{position:relative}
+.sheet .setr{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border-radius:14px;background:none;border:0;color:var(--fg);font:inherit;text-align:left;cursor:pointer}
+.setr small{display:block;color:var(--mut);font-size:12.5px;margin-top:3px;line-height:1.45}
+.setr u{flex:none;margin-left:auto;width:42px;height:25px;border-radius:99px;background:var(--ln);position:relative;transition:background .2s;text-decoration:none}
+.setr u::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .25s var(--sp)}
+.setr.on u{background:var(--ac)}.setr.on u::after{transform:translateX(17px)}
+.setl{color:var(--mut);font-size:14px;line-height:1.5;padding:6px 12px 2px}
+.seg{display:flex;gap:6px;flex-wrap:wrap;padding:6px 12px 10px}
+.sheet .seg button{display:block;width:auto;padding:8px 15px;border-radius:99px;border:1px solid var(--ln);background:none;color:var(--fg);font:inherit;font-size:14px;cursor:pointer;transition:background .2s}
+.sheet .seg button.on{background:var(--ac);color:#fff;border-color:transparent}
+/* focus mode */
+.focus #hd{display:none}
+.focus #ed{padding-left:max(22px,calc((100% - 700px)/2));padding-right:max(22px,calc((100% - 700px)/2))}
+.focus #ed>div,.focus #ed>p,.focus #ed>h2,.focus #ed>blockquote{padding-right:0}
+.focus #ed>ul,.focus #ed>ol{margin-right:0}
+.focus #ed [data-l]::after{display:none!important}
+.focus #ed{font-size:calc(var(--fs,17px) + 1px);line-height:1.8}
+@property --ya{syntax:'<length>';inherits:false;initial-value:0px}
+@property --yb{syntax:'<length>';inherits:false;initial-value:0px}
+.focus.fd #ed{--dm:.28;transition:--ya .16s,--yb .16s;-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,var(--dm)) 0,rgba(0,0,0,var(--dm)) calc(var(--ya) - 22px),#000 var(--ya),#000 var(--yb),rgba(0,0,0,var(--dm)) calc(var(--yb) + 22px),rgba(0,0,0,var(--dm)) 100%);mask-image:linear-gradient(to bottom,rgba(0,0,0,var(--dm)) 0,rgba(0,0,0,var(--dm)) calc(var(--ya) - 22px),#000 var(--ya),#000 var(--yb),rgba(0,0,0,var(--dm)) calc(var(--yb) + 22px),rgba(0,0,0,var(--dm)) 100%)}
+.focus #tb{opacity:.3;transition:opacity .25s}.focus #tb:hover,.focus #tb:focus-within,.focus.peek #tb{opacity:1}
+#fx{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;z-index:7;display:none;align-items:center;gap:10px;padding:5px 5px 5px 14px;border-radius:99px;background:var(--solid,#fff);border:1px solid var(--ln);box-shadow:var(--sh);color:var(--mut);font-size:13.5px;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .25s,transform .3s var(--sp)}
+#app.focus~#fx{display:flex}#app.focus.peek~#fx{opacity:1;pointer-events:auto;transform:none}
+#fx button{display:flex;align-items:center;gap:6px;border:0;border-radius:99px;padding:7px 13px;background:var(--ln);color:var(--fg);font:inherit;font-size:13.5px;cursor:pointer}#fx button svg{color:var(--ac)}
+/* viewing mode */
+#vm{position:absolute;left:50%;bottom:98px;z-index:3;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 14px;border-radius:99px;background:var(--solid,#fff);border:1px solid var(--ln);box-shadow:var(--sh);color:var(--mut);font-size:13.5px;white-space:nowrap;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,12px);transition:opacity .22s,transform .3s var(--sp),visibility 0s .3s}
+.viewing #vm{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0);transition-delay:0s}
+#vm button{border:0;border-radius:99px;padding:7px 14px;background:var(--ln);color:var(--fg);font:inherit;font-size:13.5px;cursor:pointer}
+#vm #vme{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}
+.viewing .card{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--ac) 40%,transparent),var(--sh)}
+.viewing #tb{opacity:.35;pointer-events:none}
+.viewing #ed{cursor:default}
+/* time editor */
+#te{position:fixed;z-index:9;width:min(300px,92vw);padding:14px;display:grid;gap:10px;background:var(--solid,#fff);color:var(--fg);border:1px solid var(--ln);border-radius:20px;box-shadow:var(--sh);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(6px) scale(.96);transition:opacity .18s,transform .26s var(--sp),visibility 0s .26s}
+#te.show{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition-delay:0s}
+#te b{font-size:16px}#tet{color:var(--mut);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:-6px}
+#tei{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit;color-scheme:light dark}
+.ter{display:flex;gap:8px;justify-content:flex-end}
+#te button{padding:9px 15px;border-radius:12px;border:0;background:var(--ln);color:var(--fg);font:inherit;cursor:pointer}
+#te #tes{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}
+/* laptop: no note open => no note buttons */
+#empty{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:var(--mut);animation:fade .4s}
+#empty .eic{width:78px;height:78px;border-radius:26px;display:grid;place-items:center;background:color-mix(in srgb,var(--ac) 14%,transparent);color:var(--ac);margin-bottom:8px}
+#empty b{color:var(--fg);font-size:22px;letter-spacing:-.01em}
+#empty button{margin-top:12px;padding:11px 22px;border-radius:99px;border:0;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font:inherit;cursor:pointer;box-shadow:0 6px 18px color-mix(in srgb,var(--ac) 35%,transparent)}
+#empty small{opacity:.7}
+@media(min-width:820px){#app:not(.open) #hd,#app:not(.open) .card,#app:not(.open) #mm{display:none}#app:not(.open) #empty{display:flex}}
+@media(min-width:820px){.open .side{display:flex}.focus .side{display:none}}
 </style></head>
 <body>
 <div id="bg"><div id="bgb"></div><img id="bgi" alt="" style="display:none"></div><div id="dim"></div>
@@ -199,23 +249,33 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
  </div>
  <div class="main">
   <div class="row glass" id="hd"><button class="ib back" id="back"></button><button class="ib" id="dwb" title="All notes"></button><span id="meta"></span><button class="ib" id="pin" title="Pin"></button><button class="ib" id="mmb" title="More"></button></div>
-  <div id="mm" class="glass"><button id="nth"></button><button id="tsb"></button><button id="fm"></button><button id="twb"></button><button id="xb"></button>
+  <div id="mm" class="glass"><button id="nth"></button><button id="tsb"></button><button id="fm"></button><button id="twb"></button><button id="vmb"></button><button id="tlb"></button><button id="xb"></button>
    <div id="xm"><button data-x="txt">Download .txt</button><button data-x="md">Download .md</button><button data-x="html">Download .html</button><button data-x="copy">Copy as Markdown</button><button data-x="share">Share to another app</button></div>
    <i class="hr"></i><button id="del" class="dng"></button></div>
+  <div id="empty"><div class="eic"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></div><b>No note open</b><span>Pick a note from the list, or start a new one.</span><button id="en">New note</button><small>Alt+N</small></div>
   <div class="card glass"><div id="ed" contenteditable="true" data-ph="Select a note or tap +"></div>
-   <div id="bot" hidden><div class="row glass" id="tg"><input id="tgi" placeholder="+ tag (press Enter)"></div><button id="tgbar"><span id="tgs"></span></button></div><div id="tb"><button class="ib" data-c="bold"><b>B</b></button><button class="ib" data-c="italic"><i>I</i></button><button class="ib" data-c="underline"><u>U</u></button><button class="ib" data-c="strikeThrough"><s>S</s></button><button class="ib" data-c="h2">H</button><button class="ib" data-c="insertUnorderedList">•</button><button class="ib" data-c="insertOrderedList">1.</button><button class="ib" data-c="blockquote">❝</button><button class="ib" data-c="removeFormat">Tx</button><span id="wc"></span></div></div>
+   <div id="vm"><span>Viewing</span><button id="vme">Edit</button><button id="vmd">End</button></div><div id="bot" hidden><div class="row glass" id="tg"><input id="tgi" placeholder="+ tag (press Enter)"></div><button id="tgbar"><span id="tgs"></span></button></div><div id="tb"><button class="ib" data-c="bold"><b>B</b></button><button class="ib" data-c="italic"><i>I</i></button><button class="ib" data-c="underline"><u>U</u></button><button class="ib" data-c="strikeThrough"><s>S</s></button><button class="ib" data-c="h2">H</button><button class="ib" data-c="insertUnorderedList">•</button><button class="ib" data-c="insertOrderedList">1.</button><button class="ib" data-c="blockquote">❝</button><button class="ib" data-c="removeFormat">Tx</button><span id="wc"></span></div></div>
  </div>
 </div>
+<div id="fx"><span id="fxw">Focus</span><button id="fxb"></button></div>
+<div id="te"><b>Set time</b><div id="tet"></div><input id="tei" type="datetime-local"><div class="ter"><button id="ten">Now</button><button id="tec">Cancel</button><button id="tes">Set</button></div></div>
 <div id="dw"><div id="dws"></div><div id="dwp"><div class="dwh"><b>Notes</b><button class="ib" id="dwn" title="New note"></button></div><div id="dwl"></div></div></div>
-<div id="sh" hidden><div class="sheet"><div class="mh"><b>Menu</b></div><div class="tabs" id="tabs"><button data-t="look" class="on">Look</button><button data-t="data">Sync &amp; data</button><button data-t="about">About</button></div>
+<div id="sh" hidden><div class="sheet"><div class="mh"><b>Menu</b></div><div class="tabs" id="tabs"><button data-t="look" class="on">Look</button><button data-t="write">Writing</button><button data-t="data">Sync &amp; data</button><button data-t="about">About</button></div>
  <div class="tp" data-t="look"><h3 id="sht">App background</h3><div id="sw"></div>
  <label>Dim <input type="range" id="dm" min="0" max="80"></label>
  <label>Blur <input type="range" id="bl" min="0" max="14"></label>
  <label>Text size <input type="range" id="fz" min="14" max="26"></label>
  <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button><button id="ud" hidden>Use app background for this note</button>
  <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Accent colour</h3><div id="acv"><span>Live preview</span><i>Done</i></div><div id="dots" class="dots"></div><div class="row" style="gap:8px;padding-top:4px"><label class="btn" style="display:flex;align-items:center;gap:8px;flex:1">Custom <input type="color" id="acc" style="border:0;width:34px;height:26px;background:none;padding:0"></label><button id="acg" style="flex:1"></button></div></div>
+ <div class="tp tabhide" data-t="write"><h3>Viewing mode</h3>
+ <button class="setr" id="svm"><span>Switch to viewing mode when I scroll up<small>The note locks, so a tap can't edit it or add a wrong time stamp. Tap Edit to write again.</small></span><u></u></button>
+ <div class="setl">Also switch to viewing after being idle for</div>
+ <div class="seg" id="sidle"><button data-v="0">Never</button><button data-v="15">15 s</button><button data-v="30">30 s</button><button data-v="60">1 min</button><button data-v="300">5 min</button></div>
+ <h3>Focus mode</h3>
+ <button class="setr" id="sfd"><span>Dim every line except the one I'm writing</span><u></u></button>
+ <h3>Time stamps</h3><div class="setl">Tap a line's time stamp (on its right side) to change its time. You can also use "Set time of this line" in the note menu.</div></div>
  <div id="dat" class="tp tabhide" data-t="data"><h3>Device storage</h3><div style="padding:2px 12px 8px"><div id="stbar"><i></i></div><div id="stt"></div></div><button id="stp" hidden></button><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
- <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.07</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
+ <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.09</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Ctrl+Shift+F focus · Alt+V view only · Alt+T set time of line · Ctrl+Shift+P pin · Alt+↑ / Alt+↓ previous / next note<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
 </div></div>
 <div id="ts"></div>
 <script>
@@ -442,7 +502,7 @@ const syn=()=>{$('#tsb').classList.toggle('on',S.ts!==false);$('#fm').classList.
 cm=()=>{mm.classList.remove('show');$('#xm').classList.remove('open');$('#xb').classList.remove('open')};
 $('#mmb').onclick=e=>{e.stopPropagation();if(!cur)return;syn();mm.classList.toggle('show');bot.classList.remove('open')};
 $('#xb').onclick=()=>{$('#xb').classList.toggle('open',$('#xm').classList.toggle('open'))};
-mm.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&b.id!='xb')cm()});
+mm.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.id=='xb')return;if(b.id=='tsb'){b.classList.toggle('on',S.ts!==false);return}if(b.id=='twb'||b.id=='vmb'||b.id=='fm')return;cm()});
 let dt;const dr=()=>{armed=0;clearTimeout(dt);$('#del').classList.remove('arm');$('#del span').textContent='Delete note'};
 $('#del').onclick=e=>{const n=get();if(!n)return;if(!armed){armed=1;$('#del').classList.add('arm');$('#del span').textContent='Tap again to delete';dt=setTimeout(dr,3000);e.stopPropagation();return}dr();n.del=1;n.t=Date.now();sv('sn_n',notes);push();cm();closeNote()};
 // tags at the bottom
@@ -486,17 +546,17 @@ addEventListener('resize',q);
 if(history.state&&history.state.sn){skip++;history.go(-history.state.sn)}})();
 
 // ===== typewriter mode: the line you are writing stays in the middle =====
-(()=>{const ed=$('#ed'),on=()=>S.tw!==false,
+(()=>{const ed=$('#ed'),on=()=>S.tw!==false||$('#app').classList.contains('focus'),
 pad=()=>{ed.style.paddingBottom=on()?Math.round(ed.clientHeight*.55)+'px':''},
 mid=sm=>{if(!on()||document.activeElement!==ed)return;const g=getSelection();if(!g.rangeCount)return;const r=g.getRangeAt(0).cloneRange();r.collapse(true);let b=r.getClientRects()[0];
  if(!b||!b.height){let n=r.startContainer;n=n.nodeType==1?n:n.parentElement;if(!n||n==ed)return;b=n.getBoundingClientRect()}
  const er=ed.getBoundingClientRect(),d=b.top+b.height/2-(er.top+er.height*.4);if(Math.abs(d)>4)ed.scrollBy({top:d,behavior:sm?'smooth':'auto'})},
 go=sm=>requestAnimationFrame(()=>mid(sm));
 $('#twb').innerHTML='<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M9 7l-5 5 5 5M15 7l5 5-5 5" transform="rotate(90 12 12)"/></svg><span>Keep writing centered</span><u></u>';
-const st=()=>$('#twb').classList.toggle('on',on());st();
+const st=()=>$('#twb').classList.toggle('on',S.tw!==false);st();
 $('#mmb').addEventListener('click',st);
-$('#twb').onclick=()=>{S.tw=!on();sv('sn_s',S);st();pad();toast(on()?'Your writing stays in the middle':'Typewriter mode off');if(on())go(true)};
-new ResizeObserver(pad).observe(ed);pad();
+$('#twb').onclick=()=>{S.tw=S.tw===false;sv('sn_s',S);st();pad();toast(S.tw!==false?'Your writing stays in the middle':'Typewriter mode off');if(S.tw!==false)go(true)};
+new ResizeObserver(pad).observe(ed);pad();window.__pad=pad;
 ed.addEventListener('input',()=>go(false));
 ed.addEventListener('keyup',e=>{if(/^(Enter|Arrow|Page)/.test(e.key))go(true)});
 if(window.visualViewport)visualViewport.addEventListener('resize',()=>go(false))})();
@@ -504,4 +564,82 @@ if(window.visualViewport)visualViewport.addEventListener('resize',()=>go(false))
 // keep old time stamps when a line changes type (heading, list, quote...)
 (()=>{const snap=()=>{window.__snap=[...$('#ed').querySelectorAll(':scope>div,:scope>p,:scope>h2,:scope>blockquote,li')].map(b=>({k:b.textContent.trim(),t:b.dataset.t})).filter(x=>x.k&&x.t);setTimeout(()=>{window.__snap=null},1500)};
 ['mousedown','touchstart'].forEach(e=>$('#tb').addEventListener(e,snap,true))})();
+
+// ===== Update 1.08: focus mode, viewing mode, manual line time =====
+(()=>{const app=$('#app'),ed=$('#ed'),SEL='#ed>div,#ed>p,#ed>h2,#ed>blockquote,#ed li';
+const ic=(d,z=19)=>'<svg viewBox="0 0 24 24" width="'+z+'" height="'+z+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>',
+EYE='<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',CLK='<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>';
+$('#vmb').innerHTML=ic(EYE)+'<span>View only</span><u></u>';$('#tlb').innerHTML=ic(CLK)+'<span>Set time of this line</span>';
+$('#vm').insertAdjacentHTML('afterbegin',ic(EYE,17));$('#fxb').innerHTML=ic('<path d="M6 6l12 12M18 6L6 18"/>',16)+'<span>Exit focus</span>';
+$('#en').onclick=()=>newNote();
+const blockOf=n=>{n=n&&(n.nodeType==1?n:n.parentElement);return n&&n!=ed&&ed.contains(n)?n.closest(SEL):null};
+let lr=null,vm=false,idleT,up=0,last=0,uAt=0,pk,fw0=0,rq=0,tb=null;
+const wc=()=>(ed.innerText.match(/\S+/g)||[]).length;
+// ---- focus mode ----
+function band(){if(!app.classList.contains('focus')||S.fd===false)return;const g=getSelection(),er=ed.getBoundingClientRect();let b=g.rangeCount&&ed.contains(g.anchorNode)?blockOf(g.anchorNode):null;
+ if(b){const r=b.getBoundingClientRect();ed.style.setProperty('--ya',Math.round(r.top-er.top)+'px');ed.style.setProperty('--yb',Math.round(r.bottom-er.top)+'px')}
+ else if(!ed.style.getPropertyValue('--ya')){ed.style.setProperty('--ya',Math.round(er.height*.36)+'px');ed.style.setProperty('--yb',Math.round(er.height*.48)+'px')}}
+const bq=()=>{if(!rq){rq=1;requestAnimationFrame(()=>{rq=0;band()})}};
+const peek=()=>{if(!app.classList.contains('focus'))return;app.classList.add('peek');clearTimeout(pk);pk=setTimeout(()=>app.classList.remove('peek'),2600)};
+function setFocus(on){on=!!on&&!!cur;const was=app.classList.contains('focus');if(on==was)return;app.classList.toggle('focus',on);$('#fm').classList.toggle('on',on);
+ if(on){fw0=wc();$('#fxw').textContent='Focus';ed.style.removeProperty('--ya');ed.style.removeProperty('--yb');if(!vm){ed.focus();if(lr&&ed.contains(lr.startContainer)){const g=getSelection();g.removeAllRanges();g.addRange(lr)}}peek()}
+ else{app.classList.remove('peek');ed.style.removeProperty('--ya');ed.style.removeProperty('--yb')}
+ setTimeout(()=>{window.__pad&&window.__pad();bq();if(on)ed.dispatchEvent(new KeyboardEvent('keyup',{key:'ArrowDown'}))},80);toast(on?(matchMedia('(pointer:coarse)').matches?'Focus mode on. Tap the screen to show Exit':'Focus mode on. Press Esc to leave'):'Focus mode off')}
+$('#fm').onclick=()=>setFocus(!app.classList.contains('focus'));$('#fxb').onclick=()=>setFocus(false);
+{let mx=0,my=0;document.addEventListener('mousemove',e=>{if(Math.abs(e.clientX-mx)+Math.abs(e.clientY-my)>6)peek();mx=e.clientX;my=e.clientY});document.addEventListener('touchstart',peek,{passive:true})}
+app.classList.toggle('fd',S.fd!==false);
+// ---- viewing mode ----
+function setView(on){on=!!on&&!!cur;if(on==vm)return;vm=on;ed.contentEditable=on?'false':(cur?'true':'false');app.classList.toggle('viewing',on);$('#vmb').classList.toggle('on',on);if(on){ed.blur();getSelection().removeAllRanges();closeTE()}else idle()}
+const idle=()=>{clearTimeout(idleT);const t=+S.vi||0;if(!t||S.vm===false||!cur||vm)return;idleT=setTimeout(()=>{const n=get();if(cur&&!vm&&n&&txt(n.html).trim())setView(true)},t*1000)};
+['input','keydown','pointerdown'].forEach(e=>ed.addEventListener(e,idle));
+['wheel','touchmove'].forEach(e=>ed.addEventListener(e,()=>{uAt=Date.now()},{passive:true}));
+ed.addEventListener('scroll',()=>{const st=ed.scrollTop,d=st-last;last=st;if(Date.now()-uAt>900){up=0;return}if(d<0){up-=d;if(up>140&&S.vm!==false&&cur&&!vm)setView(true)}else if(d>0)up=0;bq()});
+$('#vme').onclick=()=>setView(false);
+$('#vmd').onclick=()=>{setView(false);let n=ed;while(n.lastChild)n=n.lastChild;const r=document.createRange();if(n.nodeType==3)r.setStart(n,n.length);else if(n.nodeName=='BR')r.setStartBefore(n);else r.selectNodeContents(n);r.collapse(true);ed.focus();const g=getSelection();g.removeAllRanges();g.addRange(r);ed.scrollTop=ed.scrollHeight;setTimeout(()=>ed.dispatchEvent(new KeyboardEvent('keyup',{key:'ArrowDown'})),30)};
+$('#vmb').onclick=()=>setView(!vm);$('#mmb').addEventListener('click',()=>$('#vmb').classList.toggle('on',vm));
+// ---- manual time of a line ----
+const te=$('#te'),tei=$('#tei'),p2=n=>String(n).padStart(2,'0'),loc=ms=>{const d=new Date(+ms);return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())+'T'+p2(d.getHours())+':'+p2(d.getMinutes())};
+function closeTE(){te.classList.remove('show')}
+function openTE(b,x,y){if(vm){toast('Turn off viewing mode to change a time');return}if(!b)return;tb=b;tei.value=loc(b.dataset.t||Date.now());$('#tet').textContent=b.textContent.trim().slice(0,40)||'This line';
+ const w=Math.min(300,innerWidth*.92);te.style.left=Math.max(8,Math.min(x-w+24,innerWidth-w-8))+'px';te.style.top=Math.max(8,Math.min(y+14,innerHeight-220))+'px';te.classList.add('show');if(matchMedia('(pointer:fine)').matches)setTimeout(()=>tei.focus(),80)}
+function setT(ms){if(!tb||!(ms>0)){toast('Pick a valid date and time');return}tb.dataset.t=String(ms);closeTE();ed.dispatchEvent(new Event('input',{bubbles:true}));toast('Time updated')}
+$('#tes').onclick=()=>setT(new Date(tei.value).getTime());$('#ten').onclick=()=>setT(Date.now());$('#tec').onclick=closeTE;
+tei.addEventListener('keydown',e=>{if(e.key=='Enter'){e.preventDefault();$('#tes').click()}});
+document.addEventListener('pointerdown',e=>{if(te.classList.contains('show')&&!e.target.closest('#te'))closeTE()});
+document.addEventListener('selectionchange',()=>{const g=getSelection();if(g.rangeCount&&ed.contains(g.anchorNode))lr=g.getRangeAt(0).cloneRange();bq()});
+const ZW=()=>innerWidth<=600?46:58,
+zone=(x,y)=>{if(!cur||S.ts===false||app.classList.contains('focus'))return null;return [...ed.querySelectorAll(SEL)].reverse().find(b=>{if(!b.dataset.t||!b.textContent.trim())return false;const r=b.getBoundingClientRect(),li=b.tagName=='LI';return x>=(li?r.right:r.right-ZW())&&x<=(li?r.right+50:r.right)&&y>=r.top&&y<=r.top+28})||null};
+ed.addEventListener('mousedown',e=>{if(e.button==0&&!vm&&zone(e.clientX,e.clientY))e.preventDefault()});
+ed.addEventListener('click',e=>{if(vm)return;const b=zone(e.clientX,e.clientY);if(b){e.preventDefault();openTE(b,e.clientX,e.clientY)}});
+{let t0=null;ed.addEventListener('touchstart',e=>{const t=e.touches[0];t0={x:t.clientX,y:t.clientY,at:Date.now()}},{passive:true});
+ ed.addEventListener('touchend',e=>{if(!t0||vm)return;const t=e.changedTouches[0];if(Math.abs(t.clientX-t0.x)<10&&Math.abs(t.clientY-t0.y)<10&&Date.now()-t0.at<500){const b=zone(t.clientX,t.clientY);if(b){e.preventDefault();openTE(b,t.clientX,t.clientY)}}t0=null})}
+$('#tlb').onclick=()=>{const b=blockOf(lr&&lr.startContainer);if(!b){toast('Tap the line first, then try again');return}const r=b.getBoundingClientRect();openTE(b,Math.min(r.right,innerWidth-10),Math.max(90,r.top))};
+// ---- settings tab ----
+const tgl=(id,key,fn)=>{const b=$(id),st=()=>b.classList.toggle('on',S[key]!==false);st();b.onclick=()=>{S[key]=S[key]===false;sv('sn_s',S);st();fn&&fn()}};
+tgl('#svm','vm',idle);tgl('#sfd','fd',()=>{app.classList.toggle('fd',S.fd!==false);bq()});
+const seg=()=>$('#sidle').querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.v==(+S.vi||0)));seg();
+$('#sidle').onclick=e=>{const v=e.target.dataset.v;if(v==null)return;S.vi=+v;sv('sn_s',S);seg();idle();toast(+v?'Viewing mode starts after '+(+v<60?v+' seconds':(+v/60)+' min')+' idle':'Idle viewing mode is off')};
+ed.addEventListener('input',()=>{if(app.classList.contains('focus')){const d=wc()-fw0;$('#fxw').textContent=d>0?'+'+d+' words':'Focus'}bq()});
+addEventListener('resize',bq);
+addEventListener('keydown',e=>{if(e.key!='Escape'||e.cancelBubble)return;if(te.classList.contains('show')){closeTE();e.stopPropagation()}else if(app.classList.contains('focus')){setFocus(false);e.stopPropagation()}},true);
+// ---- hooks ----
+{const _o=open,_c=closeNote;open=function(id){setView(false);_o(id);idle()};closeNote=function(){closeTE();setFocus(false);setView(false);_c()}}
+})();
+
+// ===== Update 1.09: keyboard shortcuts =====
+(()=>{const app=$('#app');
+const ordered=()=>live().sort((a,b)=>(b.pin||0)-(a.pin||0)||b.t-a.t);
+const step=d=>{if(!cur)return;const L=ordered(),i=L.findIndex(n=>n.id==cur),t=L[i+d];if(!t)return;const n=get();if(n&&!txt(n.html).trim()){n.del=1;n.t=Date.now()}sv('sn_n',notes);push();open(t.id)};
+addEventListener('keydown',e=>{
+ const k=e.code,sh=e.shiftKey,al=e.altKey,ct=e.ctrlKey||e.metaKey;
+ let hit=false;
+ if(ct&&sh&&k=='KeyF'){if(cur){$('#fm').click();hit=true}}
+ else if(al&&!ct&&!sh&&k=='KeyV'){if(cur){$('#vmb').click();hit=true}}
+ else if(ct&&sh&&k=='KeyP'){if(cur){$('#pin').click();hit=true}}
+ else if(al&&!ct&&!sh&&k=='KeyT'){if(cur){$('#tlb').click();hit=true}}
+ else if(al&&!ct&&!sh&&k=='ArrowDown'){step(1);hit=true}
+ else if(al&&!ct&&!sh&&k=='ArrowUp'){step(-1);hit=true}
+ if(hit){e.preventDefault();e.stopPropagation()}
+},true);
+})();
 })();</script></body></html>
