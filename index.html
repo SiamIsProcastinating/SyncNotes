@@ -238,9 +238,48 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
 #empty small{opacity:.7}
 @media(min-width:820px){#app:not(.open) #hd,#app:not(.open) .card,#app:not(.open) #mm{display:none}#app:not(.open) #empty{display:flex}}
 @media(min-width:820px){.open .side{display:flex}.focus .side{display:none}}
+
+/* ===== Update 1.11: dynamic themes ===== */
+#scn{position:absolute;inset:24px;overflow:hidden;pointer-events:none}
+#scn svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+#scn::after,.sw[data-sc=petal]::after,.sw[data-sc=chalk]::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0}
+#scn[data-sc=petal]::after,.sw[data-sc=petal]::after{background-image:var(--nd);opacity:1}
+#scn[data-sc=chalk]::after,.sw[data-sc=chalk]::after{background-image:var(--nl);opacity:1}
+#scn.still *{animation:none!important}
+.fl{animation:fall linear infinite}
+@keyframes fall{from{transform:translate(0,var(--a)) rotate(0deg)}to{transform:translate(var(--dx),var(--b)) rotate(var(--r))}}
+.sway{transform-box:fill-box;transform-origin:50% 100%;animation:sway ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-3.5deg)}to{transform:rotate(3.5deg)}}
+.dr{animation:drift ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate(-3px,2px)}to{transform:translate(4px,-3px)}}
+.flt{animation:flt 9s ease-in-out infinite}
+@keyframes flt{0%,100%{transform:translate(0,0)}50%{transform:translate(-6px,7px)}}
+.bnc{animation:bnc 2.4s ease-in-out infinite}
+@keyframes bnc{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.bl{animation:blob ease-in-out infinite alternate}
+@keyframes blob{from{transform:translate(-10px,4px) scale(1)}to{transform:translate(12px,-8px) scale(1.15)}}
+.dst{animation:dust linear infinite}
+@keyframes dust{from{transform:translate(0,0);opacity:0}15%{opacity:.8}to{transform:translate(var(--dx),-60px);opacity:0}}
+.tw{animation:tw ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.2}50%{opacity:1}}
+.mt{animation:mt linear infinite;opacity:0}
+@keyframes mt{0%{transform:translate(-20px,0);opacity:0}6%{opacity:1}30%{transform:translate(70px,0);opacity:0}100%{transform:translate(70px,0);opacity:0}}
+/* theme picker strip */
+#sw{display:flex;flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;gap:12px;padding:8px 6px 14px;margin:0 -6px;scrollbar-width:none}
+#sw::-webkit-scrollbar{display:none}
+.sw{width:86px;height:120px;flex:none;border-radius:20px;scroll-snap-align:center;overflow:hidden;align-items:flex-end;justify-content:center;padding:6px;transition:transform .25s var(--sp),box-shadow .25s,border-color .25s}
+.sw svg{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.sw svg *{animation:none!important}
+.sw span{position:relative;z-index:1;font-size:11.5px;padding:2px 9px;border-radius:99px;background:rgba(0,0,0,.4);color:#fff;text-shadow:none;white-space:nowrap}
+.sw u{z-index:2}
+.sw.on{border-color:var(--ac);transform:scale(1.05);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 30%,transparent)}
+#sh.themed{background:transparent}
+#sh.themed .sheet{min-height:0;max-height:64%;width:min(640px,100%);border-radius:28px 28px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.2)}
+#sh.themed{align-items:flex-end}
+@media(min-width:820px){#sh.themed{padding-bottom:14px}#sh.themed .sheet{border-radius:28px;width:min(640px,92vw)}}
 </style></head>
 <body>
-<div id="bg"><div id="bgb"></div><img id="bgi" alt="" style="display:none"></div><div id="dim"></div>
+<div id="bg"><div id="bgb"></div><img id="bgi" alt="" style="display:none"><div id="scn"></div></div><div id="dim"></div>
 <div class="app" id="app">
  <div class="side">
   <div class="row" id="srow"><b id="ttl">Notes<small id="cnt"></small></b><div class="glass row" id="sbox"><input type="search" id="q" placeholder="Search: cat -dog tag:work"><button class="ib" id="sx" title="Close search"></button></div><button class="ib glass" id="sbt" title="Search (Ctrl+K)"></button>
@@ -260,13 +299,15 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
 <div id="fx"><span id="fxw">Focus</span><button id="fxb"></button></div>
 <div id="te"><b>Set time</b><div id="tet"></div><input id="tei" type="datetime-local"><div class="ter"><button id="ten">Now</button><button id="tec">Cancel</button><button id="tes">Set</button></div></div>
 <div id="dw"><div id="dws"></div><div id="dwp"><div class="dwh"><b>Notes</b><button class="ib" id="dwn" title="New note"></button></div><div id="dwl"></div></div></div>
-<div id="sh" hidden><div class="sheet"><div class="mh"><b>Menu</b></div><div class="tabs" id="tabs"><button data-t="look" class="on">Look</button><button data-t="write">Writing</button><button data-t="data">Sync &amp; data</button><button data-t="about">About</button></div>
- <div class="tp" data-t="look"><h3 id="sht">App background</h3><div id="sw"></div>
+<div id="sh" hidden><div class="sheet"><div class="mh"><b>Menu</b></div><div class="tabs" id="tabs"><button data-t="look" class="on">Themes</button><button data-t="write">Writing</button><button data-t="data">Sync &amp; data</button><button data-t="about">About</button></div>
+ <div class="tp" data-t="look"><h3 id="sht">App theme</h3><div id="sw"></div>
+ <button class="setr" id="san"><span>Animated backgrounds<small>Falling petals, stars and other moving scenes. Turn off to save battery.</small></span><u></u></button>
+ <button id="ud" hidden>Use app theme for this note</button>
+ <h3>Your photos</h3><label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label>
  <label>Dim <input type="range" id="dm" min="0" max="80"></label>
  <label>Blur <input type="range" id="bl" min="0" max="14"></label>
- <label>Text size <input type="range" id="fz" min="14" max="26"></label>
- <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button><button id="ud" hidden>Use app background for this note</button>
- <label class="btn" style="position:relative;overflow:hidden">+ Add your photo<input type="file" accept="image/*" id="ph" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Accent colour</h3><div id="acv"><span>Live preview</span><i>Done</i></div><div id="dots" class="dots"></div><div class="row" style="gap:8px;padding-top:4px"><label class="btn" style="display:flex;align-items:center;gap:8px;flex:1">Custom <input type="color" id="acc" style="border:0;width:34px;height:26px;background:none;padding:0"></label><button id="acg" style="flex:1"></button></div></div>
+ <button id="fit" hidden></button><button id="tx">Text colour: flip light / dark</button>
+ <h3>Text size</h3><label>Text size <input type="range" id="fz" min="14" max="26"></label><h3>Accent colour</h3><div id="acv"><span>Live preview</span><i>Done</i></div><div id="dots" class="dots"></div><div class="row" style="gap:8px;padding-top:4px"><label class="btn" style="display:flex;align-items:center;gap:8px;flex:1">Custom <input type="color" id="acc" style="border:0;width:34px;height:26px;background:none;padding:0"></label><button id="acg" style="flex:1"></button></div></div>
  <div class="tp tabhide" data-t="write"><h3>Viewing mode</h3>
  <button class="setr" id="svm"><span>Switch to viewing mode when I scroll up<small>The note locks, so a tap can't edit it or add a wrong time stamp. Tap Edit to write again.</small></span><u></u></button>
  <div class="setl">Also switch to viewing after being idle for</div>
@@ -275,7 +316,7 @@ button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
  <button class="setr" id="sfd"><span>Dim every line except the one I'm writing</span><u></u></button>
  <h3>Writing help</h3><button class="setr" id="sap"><span>Auto punctuation and capitals<small>Capitals start sentences, "i" becomes "I", and "--" becomes a dash.</small></span><u></u></button><button class="setr" id="ssp"><span>Spelling hints<small>Underlines words it does not know. Hover a word to see suggestions. Ignore keeps a word.</small></span><u></u></button><h3>Time stamps</h3><div class="setl">Tap a line's time stamp (on its right side) to change its time. You can also use "Set time of this line" in the note menu.</div></div>
  <div id="dat" class="tp tabhide" data-t="data"><h3>Device storage</h3><div style="padding:2px 12px 8px"><div id="stbar"><i></i></div><div id="stt"></div></div><button id="stp" hidden></button><h3>Sync (GitHub Gist)</h3><input id="tki" type="password" placeholder="Paste GitHub token" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--ln);background:transparent;color:var(--fg);font:inherit"><button id="tks">Save token and sync now</button><button id="tkx">Turn sync off</button><div id="sst" style="color:var(--mut);font-size:14px;padding:4px 12px"></div><h3>Data</h3><button id="ea">Export all notes (.md)</button><button id="es">Export for Simplenote (.json)</button><button id="eb">Backup (.json)</button>
- <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.10.1</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Ctrl+Shift+F focus · Alt+V view only · Alt+T set time of line · Ctrl+Shift+P pin · Alt+↑ / Alt+↓ previous / next note<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
+ <label class="btn" style="position:relative;overflow:hidden">Import notes (Simplenote .json, backup, .txt/.md)<input type="file" accept=".json,.txt,.md" id="rs" multiple style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0"></label><h3>Recently deleted</h3><div id="trl"></div></div><div class="tp tabhide" data-t="about"><h3>Notes v1.11</h3><div style="color:var(--mut);font-size:14px;padding:4px 12px 10px;line-height:1.8">Ctrl+K search · Ctrl+, menu · Alt+N new note · Esc back<br>Ctrl+Shift+F focus · Alt+V view only · Alt+T set time of line · Ctrl+Shift+P pin · Alt+↑ / Alt+↓ previous / next note<br>Notes sync through a private GitHub Gist. Deleted notes stay restorable for 30 days.</div></div><button id="cl">Done</button>
 </div></div>
 <div id="ts"></div>
 <script>
@@ -305,17 +346,59 @@ let notes=ls('sn_n',[]),bgs=ls('sn_b',[]),S=Object.assign({theme:'auto',dim:30,b
 const TG=()=>{const n=get();if(sm=='n'&&n){if(!n.th)n.th=Object.assign({},S);return n.th}return S};
 const sav=()=>{sv('sn_s',S);if(sm=='n'&&get()){get().t=Date.now();sv('sn_n',notes);push()}};
 const TH=[{id:'auto',n:'Auto',c:'#888',k:'auto'},{id:'paper',n:'Paper',c:'#f6f1e7',k:'d'},{id:'night',n:'Night',c:'#15161a',k:'l'},
-{id:'sunset',n:'Sunset',c:'linear-gradient(160deg,#ff9a76,#c44b8a,#3b2a6b)',k:'l'},{id:'ocean',n:'Ocean',c:'linear-gradient(160deg,#7ad0e8,#2b6cb0,#142b52)',k:'l'},{id:'forest',n:'Forest',c:'linear-gradient(160deg,#a8d5a2,#2f7d5b,#12372f)',k:'l'}];
+{id:'sunset',n:'Sunset',c:'linear-gradient(160deg,#ff9a76,#c44b8a,#3b2a6b)',k:'l'},{id:'ocean',n:'Ocean',c:'linear-gradient(160deg,#7ad0e8,#2b6cb0,#142b52)',k:'l'},{id:'forest',n:'Forest',c:'linear-gradient(160deg,#a8d5a2,#2f7d5b,#12372f)',k:'l'},
+{id:'leaf',n:'Leaf',c:'linear-gradient(170deg,#5aa89b,#7ec6b9 55%,#5aa89b)',k:'l',sc:'leaf'},
+{id:'graphite',n:'Graphite',c:'linear-gradient(160deg,#0f0f11,#27272b)',k:'l',sc:'graphite'},
+{id:'petal',n:'Petal',c:'#f3efe9',k:'d',sc:'petal'},
+{id:'candy',n:'Candy',c:'repeating-linear-gradient(135deg,#fbd5e1 0 2.2px,#fde3eb 2.2px 4.4px)',k:'d',sc:'candy',fg:'#8f3550',mu:'#b0667b'},
+{id:'chalk',n:'Chalk',c:'#16171a',k:'l',sc:'chalk'},
+{id:'sky',n:'Night sky',c:'linear-gradient(180deg,#0b1f4a,#0a4a6e 58%,#4f93a4)',k:'l',sc:'sky'},
+{id:'aurora',n:'Aurora',c:'#070f1e',k:'l',sc:'aurora'},
+{id:'cream',n:'Lined paper',c:'#fbf4de',k:'d',sc:'cream'}];
 let tt;function toast(m){const t=$('#ts');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2200)}
+
+/* ===== dynamic theme scenes: drawn in code, scale to any screen ===== */
+let SU=0;
+const mkr=seed=>{let x=seed>>>0||1;return()=>((x=Math.imul(x,1664525)+1013904223>>>0)/4294967296)};
+const fall=(x,y,H,inner,dur,del,dx,rot)=>'<g transform="translate('+x.toFixed(1)+','+y.toFixed(1)+')"><g class="fl" style="--a:'+(-(y+14)).toFixed(0)+'px;--b:'+(H-y+14).toFixed(0)+'px;--dx:'+dx+'px;--r:'+rot+'deg;animation-duration:'+dur+'s;animation-delay:-'+del+'s">'+inner+'</g></g>';
+const SCN={
+ leaf:(W,H)=>{const L='<path d="M0,-40C22,-34 34,-6 26,22C20,42 6,54 0,62C-6,54 -20,42 -26,22C-34,-6 -22,-34 0,-40Z"/><path d="M0,-34V58M0,-8L16,-20M0,10L18,0M0,-8L-16,-20M0,10L-18,0" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1"/>',
+  lv=(x,y,r,k,f,d)=>'<g transform="translate('+x.toFixed(0)+','+y.toFixed(0)+') rotate('+r+') scale('+k+')"><g class="sway" style="animation-duration:'+d+'s" fill="'+f+'">'+L+'</g></g>';
+  return lv(W*.06,H*.16,-25,1.5,'rgba(255,255,255,.12)',13)+lv(W*.96,H*.5,20,1.9,'rgba(20,110,95,.22)',16)+lv(W*.2,H*.9,-10,1.7,'rgba(255,255,255,.1)',15)+lv(W*.72,H*.06,35,1.1,'rgba(20,110,95,.18)',11)+lv(W*.5,H*.6,-32,.9,'rgba(255,255,255,.08)',12)},
+ graphite:(W,H,R)=>{let o='';for(let i=0;i<7;i++){const cx=R()*W,cy=R()*H,r=22+R()*34,n=3+(R()*2|0),p=[];for(let k=0;k<n;k++){const a=k/n*6.283+R();p.push((cx+Math.cos(a)*r).toFixed(1)+','+(cy+Math.sin(a)*r*1.2).toFixed(1))}
+  o+='<g class="dr" style="animation-duration:'+(18+R()*14|0)+'s;animation-delay:-'+(R()*20|0)+'s"><polygon points="'+p.join(' ')+'" fill="rgba(255,255,255,'+(.025+R()*.05).toFixed(3)+')" stroke="rgba(255,255,255,.07)" stroke-width=".3"/></g>'}return o},
+ petal:(W,H,R)=>{let o='<rect x="7" y="9" width="'+(W-14)+'" height="'+(H-18)+'" rx="1" fill="none" stroke="#e07f78" stroke-width=".55" opacity=".75"/><rect x="9.5" y="11.5" width="'+(W-19)+'" height="'+(H-23)+'" fill="none" stroke="#e07f78" stroke-width=".18" opacity=".5"/>';
+  const n=Math.min(30,Math.round(W/9)+4);for(let i=0;i<n;i++){const k=.36+R()*.34;o+=fall(R()*W,R()*H,H,'<path transform="scale('+k.toFixed(2)+')" d="M0,0C2,-3 6,-3 7,0C6,4 2,6 0,3Z" fill="'+(R()<.5?'#f3a7b6':'#f7c1cb')+'" opacity=".92"/>',14+R()*14|0,R()*26|0,R()*30-15|0,R()*200-60|0)}return o},
+ candy:(W,H,R,u)=>{const c='cd'+u,cols=['#f58aa6','#5cc2bf','#ffd23f','#ffffff'];
+  let o='<defs><clipPath id="'+c+'"><circle r="11"/></clipPath></defs><g transform="translate('+(W*.76).toFixed(1)+','+(H*.12).toFixed(1)+') scale(.72)"><g class="flt"><ellipse cx="2" cy="15" rx="9" ry="2" fill="rgba(160,60,90,.15)"/><circle r="11" fill="#fff6e6"/><g clip-path="url(#'+c+')" fill="#5cc2bf"><path d="M-12,-5Q0,-12 12,-5L12,0Q0,-7 -12,0Z"/><path d="M-12,5Q0,-2 12,5L12,10Q0,3 -12,10Z"/><path d="M-5,-12L0,-12L8,12L3,12Z"/></g><circle r="11" fill="none" stroke="rgba(255,255,255,.7)" stroke-width=".6"/></g></g><g transform="translate('+(W*.3).toFixed(1)+','+(H*.07).toFixed(1)+')"><g class="bnc"><circle r="2.4" fill="#ffd23f"/></g></g>';
+  for(let i=0;i<10;i++)o+=fall(R()*W,R()*H,H,'<circle r="'+(.7+R()*.9).toFixed(1)+'" fill="'+cols[i%4]+'" opacity=".75"/>',20+R()*14|0,R()*30|0,R()*30-15|0,0);return o},
+ chalk:(W,H,R)=>{const x=Math.max(6,W*.05);let o='<line x1="'+x+'" x2="'+x+'" y1="0" y2="'+H+'" stroke="rgba(255,255,255,.16)" stroke-width=".25"/><line x1="'+(W-x)+'" x2="'+(W-x)+'" y1="0" y2="'+H+'" stroke="rgba(255,255,255,.16)" stroke-width=".25"/>';
+  for(let i=0;i<18;i++)o+='<g transform="translate('+(R()*W).toFixed(1)+','+(R()*H).toFixed(1)+')"><g class="dst" style="--dx:'+(R()*14-7|0)+'px;animation-duration:'+(10+R()*12|0)+'s;animation-delay:-'+(R()*18|0)+'s"><circle r="'+(.25+R()*.5).toFixed(2)+'" fill="#fff"/></g></g>';return o},
+ sky:(W,H,R,u)=>{const g='mg'+u,m=(a,b)=>(W*a).toFixed(1)+','+(H*b).toFixed(1);
+  let o='<defs><linearGradient id="'+g+'" x1="1" x2="0"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>';
+  for(let i=0;i<Math.min(70,Math.round(W*.4));i++)o+='<circle class="tw" cx="'+(R()*W).toFixed(1)+'" cy="'+(R()*H*.8).toFixed(1)+'" r="'+(.22+R()*.45).toFixed(2)+'" fill="#fff" style="animation-duration:'+(2+R()*4).toFixed(1)+'s;animation-delay:-'+(R()*5).toFixed(1)+'s"/>';
+  for(let i=0;i<4;i++)o+='<g transform="translate('+(R()*W*.9).toFixed(0)+','+(R()*H*.4).toFixed(0)+') rotate(32)"><g class="mt" style="animation-duration:'+(7+R()*6|0)+'s;animation-delay:-'+(R()*10|0)+'s"><rect x="-16" y="0" width="16" height=".5" fill="url(#'+g+')"/></g></g>';
+  return o+'<path d="M0,'+H+' L0,'+(H*.88).toFixed(1)+' L'+m(.12,.82)+' L'+m(.22,.87)+' L'+m(.36,.76)+' L'+m(.45,.83)+' L'+m(.58,.79)+' L'+m(.7,.87)+' L'+m(.85,.81)+' L'+m(1,.88)+' L'+W+','+H+'Z" fill="#0c2742" opacity=".92"/><path d="M'+m(.36,.76)+' L'+m(.325,.795)+' L'+m(.35,.79)+' L'+m(.37,.8)+' L'+m(.4,.79)+'Z" fill="#dfeaf2" opacity=".55"/>'},
+ aurora:(W,H,R,u)=>{const C=[['#2fe3b5',.55],['#6a5cff',.5],['#27b6ff',.45]];
+  let o='<defs>'+C.map((c,i)=>'<radialGradient id="ag'+u+i+'"><stop offset="0" stop-color="'+c[0]+'" stop-opacity="'+c[1]+'"/><stop offset="1" stop-color="'+c[0]+'" stop-opacity="0"/></radialGradient>').join('')+'</defs>';
+  for(let i=0;i<3;i++)o+='<g class="bl" style="animation-duration:'+(16+i*5)+'s;animation-delay:-'+(i*6)+'s"><circle cx="'+(W*(.2+i*.3)).toFixed(0)+'" cy="'+(H*(.25+i*.2)).toFixed(0)+'" r="'+(Math.max(W,H)*.45).toFixed(0)+'" fill="url(#ag'+u+i+')"/></g>';return o},
+ cream:(W,H)=>{let o='';for(let y=16;y<H;y+=9)o+='<line x1="0" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="rgba(140,105,50,.15)" stroke-width=".25"/>';return o+'<line x1="'+(W*.09).toFixed(1)+'" x2="'+(W*.09).toFixed(1)+'" y1="0" y2="'+H+'" stroke="rgba(214,86,86,.3)" stroke-width=".3"/>'}};
+function scn(id,W,H){const u=++SU,R=mkr([...id].reduce((a,c)=>a*31+c.charCodeAt(0)|0,7)+W);return'<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+SCN[id](W,H,R,u)+'</svg>'}
+function scene(t){const el=$('#scn');if(!t||!t.sc){if(el.dataset.k){el.innerHTML='';el.dataset.k='';el.dataset.sc=''}return}
+ const a=Math.max(.45,Math.min(2.2,innerWidth/innerHeight)),W=Math.round(160*a),key=t.id+'|'+W;
+ if(el.dataset.k!==key){el.innerHTML=scn(t.sc,W,160);el.dataset.k=key;el.dataset.sc=t.sc}
+ el.classList.toggle('still',S.an===false||matchMedia('(prefers-reduced-motion:reduce)').matches)}
+function renderSw(Tg){const el=$('#sw'),sig=sm+'|'+Tg.theme+'|'+bgs.map(b=>b.id).join(',');if(el.dataset.s===sig)return;const x0=el.scrollLeft;el.dataset.s=sig;
+ el.innerHTML=TH.map(x=>'<div class="sw'+(x.id==Tg.theme?' on':'')+'" data-t="'+x.id+'"'+(x.sc?' data-sc="'+x.sc+'"':'')+' style="background:'+x.c+'">'+(x.sc?scn(x.sc,115,160):'')+'<span>'+x.n+'</span></div>').join('')+
+  bgs.map(b=>'<div class="sw'+(b.id==Tg.theme?' on':'')+'" data-t="'+b.id+'" style="background-image:url(&quot;'+(b.th||b.img)+'&quot;)"><u data-d="'+b.id+'">×</u></div>').join('');el.scrollLeft=x0}
 function apply(){const n0=get(),E=sm=='g'&&!$('#sh').hidden?S:(n0&&n0.th?n0.th:S),Tg=sm=='n'&&n0?E:S,p=bgs.find(b=>b.id==E.theme),t=TH.find(x=>x.id==E.theme)||TH[0];let k=p?E.tx:t.k;
  if(k=='auto')k=matchMedia('(prefers-color-scheme:dark)').matches?'l':'d';const L=k=='l',r=document.documentElement.style;
- r.setProperty('--gb',(p?E.blur:0)+'px');r.setProperty('--tsh',p?(L?'0 1px 3px rgba(0,0,0,.45)':'0 1px 3px rgba(255,255,255,.6)'):'none');S.fs?r.setProperty('--fs',S.fs+'px'):r.removeProperty('--fs');$('#fz').value=S.fs||17;r.setProperty('--fg',L?'#f5f5f7':'#1c1c1e');r.setProperty('--mut',L?'#c4c4ca':'#55555a');
+ r.setProperty('--gb',(p?E.blur:0)+'px');r.setProperty('--tsh',p?(L?'0 1px 3px rgba(0,0,0,.45)':'0 1px 3px rgba(255,255,255,.6)'):'none');S.fs?r.setProperty('--fs',S.fs+'px'):r.removeProperty('--fs');$('#fz').value=S.fs||17;r.setProperty('--fg',L?'#f5f5f7':'#1c1c1e');r.setProperty('--mut',L?'#c4c4ca':'#55555a');if(t.fg&&!p){r.setProperty('--fg',t.fg);r.setProperty('--mut',t.mu||t.fg)}
  r.setProperty('--solid',L?'#1e1f26':'#fcfcfa');r.setProperty('--card',L?'rgba(20,20,26,.55)':'rgba(255,255,255,.62)');r.setProperty('--ln',L?'rgba(255,255,255,.14)':'rgba(0,0,0,.1)');
- const bg=$('#bg');paint(bg,p,E,t,L);
+ const bg=$('#bg');paint(bg,p,E,t,L);scene(p?null:t);
  bg.style.filter=p&&E.blur>0?'blur('+E.blur+'px)':'none';$('#dim').style.background=p?'rgba('+(L?'0,0,0':'255,255,255')+','+E.dim/100+')':'transparent';
- $('#fit').hidden=!bgs.some(b=>b.id==Tg.theme);$('#fit').textContent='Photo: '+({auto:'Auto (blend or fill)',fit:'Fit whole photo, blended edges',fill:'Fill screen (crop)'})[Tg.fit||'auto'];$('#dm').value=Tg.dim;$('#bl').value=Tg.blur;document.body.classList.toggle('ts',S.ts!==false);$('#sht').textContent=sm=='n'?'Background for this note':'App background (list)';$('#dat').hidden=sm=='n';$('#ud').hidden=!(sm=='n'&&n0&&n0.th);
- $('#sw').innerHTML=TH.map(x=>'<div class="sw'+(x.id==Tg.theme?' on':'')+'" data-t="'+x.id+'" style="background:'+x.c+'">'+x.n+'</div>').join('')+
-  bgs.map(b=>'<div class="sw'+(b.id==Tg.theme?' on':'')+'" data-t="'+b.id+'" style="background-image:url(&quot;'+(b.th||b.img)+'&quot;)"><u data-d="'+b.id+'">×</u></div>').join('')}
+ $('#fit').hidden=!bgs.some(b=>b.id==Tg.theme);$('#fit').textContent='Photo: '+({auto:'Auto (blend or fill)',fit:'Fit whole photo, blended edges',fill:'Fill screen (crop)'})[Tg.fit||'auto'];$('#dm').value=Tg.dim;$('#bl').value=Tg.blur;document.body.classList.toggle('ts',S.ts!==false);$('#sht').textContent=sm=='n'?'Theme for this note':'App theme';$('#dat').hidden=sm=='n';$('#ud').hidden=!(sm=='n'&&n0&&n0.th);
+ renderSw(Tg)}
 const thumb=c=>{const s=160/Math.max(c.width,c.height),t=document.createElement('canvas');t.width=Math.round(c.width*s);t.height=Math.round(c.height*s);t.getContext('2d').drawImage(c,0,0,t.width,t.height);return t.toDataURL('image/jpeg',.7)};
 const lumOf=s=>{const m=s.match(/\d+/g);return(.299*m[0]+.587*m[1]+.114*m[2])/255};
 function edges(im){const W=48,H=Math.max(9,Math.round(48*im.height/im.width)),cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');x.drawImage(im,0,0,W,H);
@@ -449,7 +532,7 @@ $('#rs').onchangeOld=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=
  sv('sn_n',notes);render();push();toast('Restored')}catch(x){toast('Not a valid backup')}});e.target.value=''};
 document.addEventListener('keydown',e=>{if(e.key=='Escape'){if(!$('#sh').hidden){$('#sh').hidden=true;apply()}else if(cur)closeNote()}});document.execCommand('defaultParagraphSeparator',false,'div');$('#ed').contentEditable=false;apply();render();initSync();
 if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
-(()=>{const tabs=$('#tabs'),show=t=>{tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));document.querySelectorAll('.tp').forEach(x=>x.classList.toggle('tabhide',x.dataset.t!=t));if(t=='data')trash()};
+(()=>{const tabs=$('#tabs'),show=t=>{$('#sh').classList.toggle('themed',t=='look');tabs.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));document.querySelectorAll('.tp').forEach(x=>x.classList.toggle('tabhide',x.dataset.t!=t));if(t=='data')trash()};
 tabs.onclick=e=>{const t=e.target.dataset.t;if(t)show(t)};
 $('#pal').addEventListener('click',()=>{tabs.classList.remove('one');show('look')});$('#nth').addEventListener('click',()=>{tabs.classList.add('one');show('look')});
 const PR=['#7c6cf0','#0a84ff','#30b27a','#ff7a45','#e5484d','#e46fb0','#14b8a6','#f5b301','#8b5cf6','#64748b'],R=document.documentElement.style,ok=CSS.supports('color','hsl(from red calc(h + 45) s l)'),
@@ -491,7 +574,7 @@ $('#sbt').innerHTML=ic(IC.search);$('#sbox').insertAdjacentHTML('afterbegin',ic(
 {const p=$('#pal');p.firstChild.remove();p.insertAdjacentHTML('afterbegin',ic(IC.menu))}
 $('#dwb').innerHTML=ic(IC.panel);$('#pin').innerHTML=ic(IC.pin);$('#mmb').innerHTML=ic(IC.more);$('#dwn').innerHTML=ic(IC.plus);
 const mi=(id,i,l,x)=>{$(id).innerHTML=ic(i)+'<span>'+l+'</span>'+(x||'')};
-mi('#nth',IC.img,'Background');mi('#tsb',IC.clock,'Time stamps','<u></u>');mi('#fm',IC.focus,'Focus mode','<u></u>');mi('#xb',IC.exp,'Export','<b class="ch">'+ic(IC.chev,16)+'</b>');mi('#del',IC.trash,'Delete note');
+mi('#nth',IC.img,'Theme');mi('#tsb',IC.clock,'Time stamps','<u></u>');mi('#fm',IC.focus,'Focus mode','<u></u>');mi('#xb',IC.exp,'Export','<b class="ch">'+ic(IC.chev,16)+'</b>');mi('#del',IC.trash,'Delete note');
 $('#tgbar').insertAdjacentHTML('afterbegin',ic(IC.tag,17));$('#tgbar').insertAdjacentHTML('beforeend','<b class="ch">'+ic(IC.chev,16)+'</b>');
 // search icon that expands
 const so=()=>sr.classList.add('so'),sc=()=>{if(!qi.value)sr.classList.remove('so')};
@@ -709,4 +792,15 @@ tip.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return
 const tg=(id,key,fn)=>{const b=$(id),on=()=>b.classList.toggle('on',S[key]!==false);on();b.onclick=()=>{S[key]=S[key]===false;sv('sn_s',S);on();fn&&fn()}};
 tg('#sap','ap');tg('#ssp','sp',()=>{ed.spellcheck=S.sp===false;scan();if(S.sp===false)tip.classList.remove('show')});
 })();
+
+// ===== Update 1.11: theme picker behaviour =====
+(()=>{const noise=l=>{const c=document.createElement('canvas');c.width=c.height=96;const x=c.getContext('2d'),d=x.createImageData(96,96);for(let i=0;i<d.data.length;i+=4){d.data[i]=d.data[i+1]=d.data[i+2]=l?255:0;d.data[i+3]=Math.random()<.5?0:Math.random()*(l?34:32)|0}x.putImageData(d,0,0);return'url('+c.toDataURL()+')'};
+const R=document.documentElement.style;R.setProperty('--nl',noise(1));R.setProperty('--nd',noise(0));
+const san=$('#san'),st=()=>san.classList.toggle('on',S.an!==false);st();
+san.onclick=()=>{S.an=S.an===false;sv('sn_s',S);st();apply();toast(S.an===false?'Animations off':'Animations on')};
+const sel=()=>setTimeout(()=>{const o=$('#sw .on');o&&o.scrollIntoView({inline:'center',block:'nearest'})},160);
+$('#pal').addEventListener('click',sel);$('#nth').addEventListener('click',sel);
+$('#sw').addEventListener('click',e=>{if(e.target.closest('.sw')&&!e.target.dataset.d)setTimeout(()=>{const o=$('#sw .on');o&&o.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})},60)});
+addEventListener('resize',()=>{$('#scn').dataset.k=''});
+apply()})();
 })();</script></body></html>
